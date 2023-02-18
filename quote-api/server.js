@@ -8,3 +8,9 @@ const PORT = process.env.PORT || 4001;
 
 app.use(express.static('public'));
 
+app.use('/api/quotes', require('./routes/quotesRouter'))
+
+app.listen(PORT, () => {
+    console.log("Power Quotes Server is up and running");
+})
+
