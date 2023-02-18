@@ -11,6 +11,6 @@ app.use(express.static('public'));
 app.use('/api/quotes', require('./routes/quotesRouter'))
 
 app.listen(PORT, () => {
-    console.log("Power Quotes Server is up and running");
+    console.log("Power Quotes Server is up and running", quotes.length);
 })
 
