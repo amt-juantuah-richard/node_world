@@ -64,9 +64,14 @@
     "method": "GET",
     "sortNum": 0,
     "created": "2023-02-19T16:21:16.715Z",
-    "modified": "2023-02-19T16:21:16.715Z",
+    "modified": "2023-02-20T08:18:06.048Z",
     "headers": [],
     "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n    \"id\": \"1\",\n    \"name\": \"Susie Huels\",\n    \"title\": \"Dynamic Functionality Coordinator\",\n    \"weaknesses\": \"Will not build intuitive task-force, Unable to execute scalable methodology, Cannot do integrated moratorium, too online\",\n    \"salary\": 4000\n  }",
+      "form": []
+    },
     "tests": []
   },
   {
@@ -106,9 +111,14 @@
     "method": "GET",
     "sortNum": 0,
     "created": "2023-02-19T18:39:27.838Z",
-    "modified": "2023-02-19T18:39:27.838Z",
+    "modified": "2023-02-20T12:08:21.506Z",
     "headers": [],
     "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n    \"id\": \"3\",\n    \"name\": \"Buber but for e-business\",\n    \"description\": \"The name says it all!!!\",\n    \"weeklyRevenue\": 120191,\n    \"numWeeks\": 103\n  }",
+      "form": []
+    },
     "tests": []
   },
   {
@@ -148,9 +158,14 @@
     "method": "GET",
     "sortNum": 0,
     "created": "2023-02-19T18:51:19.529Z",
-    "modified": "2023-02-19T18:51:19.529Z",
+    "modified": "2023-02-20T11:55:44.382Z",
     "headers": [],
     "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n    \"id\": \"3\",\n    \"name\": \"Buber but for e-business\",\n    \"description\": \"The name says it all!!!\",\n    \"weeklyRevenue\": 120191,\n    \"numWeeks\": 103\n  }",
+      "form": []
+    },
     "tests": []
   },
   {
@@ -162,9 +177,14 @@
     "method": "GET",
     "sortNum": 0,
     "created": "2023-02-19T18:51:30.399Z",
-    "modified": "2023-02-19T18:51:30.399Z",
+    "modified": "2023-02-20T11:55:39.159Z",
     "headers": [],
     "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n    \"id\": \"3\",\n    \"name\": \"Buber but for e-business\",\n    \"description\": \"The name says it all!!!\",\n    \"weeklyRevenue\": 120191,\n    \"numWeeks\": 103\n  }",
+      "form": []
+    },
     "tests": []
   },
   {
@@ -204,9 +224,14 @@
     "method": "GET",
     "sortNum": 0,
     "created": "2023-02-20T05:36:53.064Z",
-    "modified": "2023-02-20T05:36:53.064Z",
+    "modified": "2023-02-20T12:24:13.531Z",
     "headers": [],
     "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n    \"name\": \"Snapchat for acations\",\n    \"description\": \"The name says it all!!!\",\n    \"weeklyRevenue\": 93776,\n    \"numWeeks\": 78\n  }",
+      "form": []
+    },
     "tests": []
   },
   {
@@ -235,6 +260,348 @@
     "modified": "2023-02-20T05:40:44.464Z",
     "headers": [],
     "params": [],
+    "tests": []
+  },
+  {
+    "_id": "5d542156-fd18-4807-aef5-5bca0faa8e05",
+    "colId": "history",
+    "containerId": "",
+    "name": "http://localhost:4001/api/minions/",
+    "url": "http://localhost:4001/api/minions/",
+    "method": "POST",
+    "sortNum": 0,
+    "created": "2023-02-20T06:29:49.863Z",
+    "modified": "2023-02-20T07:31:04.827Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n    \"name\": \"Snapchat\",\n    \"description\": \"The name all!!!\",\n    \"weeklyRevenue\": 111700,\n    \"numWeeks\": 38\n  }",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "dc5c1a7b-dece-4e49-8831-f92f0e4f41a1",
+    "colId": "history",
+    "containerId": "",
+    "name": "http://localhost:4001/api/minions/12",
+    "url": "http://localhost:4001/api/minions/12",
+    "method": "GET",
+    "sortNum": 0,
+    "created": "2023-02-20T06:32:48.365Z",
+    "modified": "2023-02-20T06:47:36.871Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n    \"name\": \"Richard Osei\",\n    \"title\": \"Software\",\n    \"weaknesses\": \"Yahh Guide\",\n    \"salary\": 100000\n  }",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "138f8b2b-d102-4393-876d-524e502e0202",
+    "colId": "history",
+    "containerId": "",
+    "name": "http://localhost:4001/api/ideas/1",
+    "url": "http://localhost:4001/api/ideas/1",
+    "method": "GET",
+    "sortNum": 0,
+    "created": "2023-02-20T06:38:08.212Z",
+    "modified": "2023-02-20T06:38:08.212Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n    \"name\": \"Richard Osei\",\n    \"title\": \"JavaScript\",\n    \"weaknesses\": \"Jah Guide\",\n    \"salary\": 100000\n  }",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "40d7695b-dd87-42d6-a47a-1b3a60935d96",
+    "colId": "history",
+    "containerId": "",
+    "name": "http://localhost:4001/api/minions/11",
+    "url": "http://localhost:4001/api/minions/11",
+    "method": "GET",
+    "sortNum": 0,
+    "created": "2023-02-20T06:45:24.615Z",
+    "modified": "2023-02-20T06:45:24.615Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n    \"name\": \"Richard Osei\",\n    \"title\": \"JavaScript\",\n    \"weaknesses\": \"Jah Guide\",\n    \"salary\": 100000\n  }",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "85c1ae99-b610-4f9f-a380-30c7e4d15ba9",
+    "colId": "history",
+    "containerId": "",
+    "name": "http://localhost:4001/api/minions/10",
+    "url": "http://localhost:4001/api/minions/10",
+    "method": "GET",
+    "sortNum": 0,
+    "created": "2023-02-20T06:45:51.459Z",
+    "modified": "2023-02-20T06:45:51.459Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n    \"name\": \"Richard Osei\",\n    \"title\": \"JavaScript\",\n    \"weaknesses\": \"Jah Guide\",\n    \"salary\": 100000\n  }",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "1d2ab886-8370-4dc0-8ba7-34092a313f6a",
+    "colId": "history",
+    "containerId": "",
+    "name": "http://localhost:4001/api/minions/13",
+    "url": "http://localhost:4001/api/minions/13",
+    "method": "GET",
+    "sortNum": 0,
+    "created": "2023-02-20T06:47:43.208Z",
+    "modified": "2023-02-20T06:47:43.208Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n    \"name\": \"Richard Osei\",\n    \"title\": \"Software\",\n    \"weaknesses\": \"Yahh Guide\",\n    \"salary\": 100000\n  }",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "c45416e1-eb1c-4d6e-ac55-07daf21a1938",
+    "colId": "history",
+    "containerId": "",
+    "name": "http://localhost:4001/api/ideas/",
+    "url": "http://localhost:4001/api/ideas/",
+    "method": "POST",
+    "sortNum": 0,
+    "created": "2023-02-20T06:50:47.668Z",
+    "modified": "2023-02-20T12:24:42.756Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n    \"name\": \"Snapchat\",\n    \"description\": \"The name says it all!!!\",\n    \"weeklyRevenue\": 776,\n    \"numWeeks\": 78\n  }",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "487032a8-e0e3-49de-952e-13ee3bc82df4",
+    "colId": "history",
+    "containerId": "",
+    "name": "http://localhost:4001/api/ideas/12",
+    "url": "http://localhost:4001/api/ideas/12",
+    "method": "GET",
+    "sortNum": 0,
+    "created": "2023-02-20T06:51:05.471Z",
+    "modified": "2023-02-20T06:51:05.471Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n    \"name\": \"Snapchat\",\n    \"description\": \"The name all!!!\",\n    \"weeklyRevenue\": 111700,\n    \"numWeeks\": 38\n  }",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "4dfacf8b-784c-435e-9edb-f25d9af4ffe3",
+    "colId": "history",
+    "containerId": "",
+    "name": "http://localhost:4001/api/ideas/11",
+    "url": "http://localhost:4001/api/ideas/11",
+    "method": "GET",
+    "sortNum": 0,
+    "created": "2023-02-20T06:51:11.112Z",
+    "modified": "2023-02-20T06:51:11.112Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n    \"name\": \"Snapchat\",\n    \"description\": \"The name all!!!\",\n    \"weeklyRevenue\": 111700,\n    \"numWeeks\": 38\n  }",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "c210eede-2309-4eb6-a7ee-0b6fcb529bf8",
+    "colId": "history",
+    "containerId": "",
+    "name": "http://localhost:4001/api/ideas/10",
+    "url": "http://localhost:4001/api/ideas/10",
+    "method": "GET",
+    "sortNum": 0,
+    "created": "2023-02-20T06:51:15.815Z",
+    "modified": "2023-02-20T06:51:15.815Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n    \"name\": \"Snapchat\",\n    \"description\": \"The name all!!!\",\n    \"weeklyRevenue\": 111700,\n    \"numWeeks\": 38\n  }",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "501567de-2a78-43c4-a3cb-8ed3fdf66219",
+    "colId": "history",
+    "containerId": "",
+    "name": "http://localhost:4001/api/ideas/9",
+    "url": "http://localhost:4001/api/ideas/9",
+    "method": "GET",
+    "sortNum": 0,
+    "created": "2023-02-20T06:51:20.359Z",
+    "modified": "2023-02-20T06:51:20.359Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n    \"name\": \"Snapchat\",\n    \"description\": \"The name all!!!\",\n    \"weeklyRevenue\": 111700,\n    \"numWeeks\": 38\n  }",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "15401e6e-28e6-46b6-9cbf-98a007900a55",
+    "colId": "history",
+    "containerId": "",
+    "name": "http://localhost:4001/api/meetings/",
+    "url": "http://localhost:4001/api/meetings/",
+    "method": "POST",
+    "sortNum": 0,
+    "created": "2023-02-20T07:30:13.965Z",
+    "modified": "2023-02-20T07:30:13.965Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n    \"name\": \"Snapchat\",\n    \"description\": \"The name all!!!\",\n    \"weeklyRevenue\": 111700,\n    \"numWeeks\": 38\n  }",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "143e806a-c225-4d38-8f53-dcc5e77f5fe9",
+    "colId": "history",
+    "containerId": "",
+    "name": "http://localhost:4001/api/minions/1",
+    "url": "http://localhost:4001/api/minions/1",
+    "method": "PUT",
+    "sortNum": 0,
+    "created": "2023-02-20T08:13:47.250Z",
+    "modified": "2023-02-20T08:13:47.250Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n    \"id\": \"1\",\n    \"name\": \"Susie Huels\",\n    \"title\": \"Dynamic Functionality Coordinator\",\n    \"weaknesses\": \"Will not build intuitive task-force, Unable to execute scalable methodology, Cannot do integrated moratorium, too online\",\n    \"salary\": 4000\n  }",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "62cd43a5-7fa2-46e9-b5e3-6bee52742283",
+    "colId": "history",
+    "containerId": "",
+    "name": "http://localhost:4001/api/ideas/1",
+    "url": "http://localhost:4001/api/ideas/1",
+    "method": "PUT",
+    "sortNum": 0,
+    "created": "2023-02-20T08:19:24.198Z",
+    "modified": "2023-02-20T08:19:24.198Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n    \"id\": \"3\",\n    \"name\": \"Buber but for e-business\",\n    \"description\": \"The name says it all!!!\",\n    \"weeklyRevenue\": 120191,\n    \"numWeeks\": 103\n  }",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "4b421e53-c4f7-416f-bdda-799cf8cc0bdf",
+    "colId": "history",
+    "containerId": "",
+    "name": "http://localhost:4001/api/ideas/",
+    "url": "http://localhost:4001/api/ideas/",
+    "method": "PUT",
+    "sortNum": 0,
+    "created": "2023-02-20T08:20:20.188Z",
+    "modified": "2023-02-20T08:20:20.188Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n    \"id\": \"3\",\n    \"name\": \"Buber but for e-business\",\n    \"description\": \"The name says it all!!!\",\n    \"weeklyRevenue\": 120191,\n    \"numWeeks\": 103\n  }",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "db7affbc-e0fb-4378-a3e6-7ecadcc25bf8",
+    "colId": "history",
+    "containerId": "",
+    "name": "http://localhost:4001/api/minions/1",
+    "url": "http://localhost:4001/api/minions/1",
+    "method": "DELETE",
+    "sortNum": 0,
+    "created": "2023-02-20T11:48:45.116Z",
+    "modified": "2023-02-20T11:48:45.116Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n    \"id\": \"3\",\n    \"name\": \"Buber but for e-business\",\n    \"description\": \"The name says it all!!!\",\n    \"weeklyRevenue\": 120191,\n    \"numWeeks\": 103\n  }",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "49c44b55-7c19-4f7c-b5fc-79aac9f233f5",
+    "colId": "history",
+    "containerId": "",
+    "name": "http://localhost:4001/api/minions/6",
+    "url": "http://localhost:4001/api/minions/6",
+    "method": "DELETE",
+    "sortNum": 0,
+    "created": "2023-02-20T11:56:09.970Z",
+    "modified": "2023-02-20T11:56:09.970Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n    \"id\": \"3\",\n    \"name\": \"Buber but for e-business\",\n    \"description\": \"The name says it all!!!\",\n    \"weeklyRevenue\": 120191,\n    \"numWeeks\": 103\n  }",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "d9a7d0f4-c2f2-49b6-8fd7-53488f39e5b6",
+    "colId": "history",
+    "containerId": "",
+    "name": "http://localhost:4001/api/meetings/",
+    "url": "http://localhost:4001/api/meetings/",
+    "method": "DELETE",
+    "sortNum": 0,
+    "created": "2023-02-20T12:08:33.584Z",
+    "modified": "2023-02-20T12:08:33.584Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n    \"id\": \"3\",\n    \"name\": \"Buber but for e-business\",\n    \"description\": \"The name says it all!!!\",\n    \"weeklyRevenue\": 120191,\n    \"numWeeks\": 103\n  }",
+      "form": []
+    },
     "tests": []
   }
 ]
