@@ -1,6 +1,10 @@
 const pool = require('../../db');
 
-const { getAllStudents, getStudentById, postStudents } = require('./queries');
+const { getAllStudents, 
+    getStudentById, 
+    postStudents, 
+    checkEmailPresent 
+} = require('./queries');
 
 const getStudents = (req, res) => {
     pool.query(getAllStudents, (error, results) => {
@@ -18,12 +22,20 @@ const getSingleStudentById = (req, res) => {
 };
 
 const addStudent = (req, res) => {
-    const { name, email, age, dob } = JSON.parse(req.body);
+    const { name, email, age, dob } = req.body;
+    // console.log(req.body);
+    // res.send("req");
 
     // check if student with email exists
-    pool.query(postStudents, [(name, email, age, dob)], (error, results) => {
-        if (error) throw error;
-        res.status(201).json(results.rows);
+    pool.query(checkEmailPresent, [email], (error, results) => {
+        if (results.rows.length) {
+            res.send(`email ${email} already exists`)
+        } else {
+            pool.query(postStudents, [name, email, age, dob], (error, results) => {
+                if (error) throw error;
+                res.status(201).send(`user with email ${email} created successfully!!`);
+            });
+        }
     })
 };
 
