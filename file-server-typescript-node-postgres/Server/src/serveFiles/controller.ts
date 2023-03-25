@@ -1,9 +1,9 @@
 // This module contains functions 
-// that control what happens 
-// when requests are sent
+// for handling requests
+
 
 // required dependencies
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import pool from './../dtb';
 import { getAllFiles, getAllUsers } from './queries';
 
@@ -16,22 +16,19 @@ import { getAllFiles, getAllUsers } from './queries';
  * @param res response object
  * @param next push to next
  */
-export const getUsers = (req: Request, res: Response, next: any) => {
+export const getUsers = (req: Request, res: Response, next: NextFunction) => {
     try {
 
         pool.query(getAllUsers, (error, results) => {
             if (error) {
                 console.log("Error executing Postgresql query");
-                throw error.stack;
+                throw error;
             }
             res.status(200).json(results.rows);
         })
         
     } catch (error) {
-        res.send({
-            message: "an error occurred",
-            error: error
-        })
+        next(error)
     }
 }
 
@@ -45,21 +42,18 @@ export const getUsers = (req: Request, res: Response, next: any) => {
  * @param req requet object
  * @param res response object
  */
-export const getFiles = (req: Request, res: Response) => {
+export const getFiles = (req: Request, res: Response, next: NextFunction) => {
     try {
 
         pool.query(getAllFiles, (error, results) => {
             if (error) {
                 console.log("Error executing Postgresql query");
-                throw error.stack;
+                throw error;
             }
             res.status(200).json(results.rows);
         })
         
     } catch (error) {
-        res.send({
-            message: "an error occurred",
-            error: error
-        })
+        next(error);
     }
 } 

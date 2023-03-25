@@ -6,6 +6,7 @@ import userRoute from './src/serveFiles/routes/userRoutes';
 import fileRoute from './src/serveFiles/routes/fileRoutes';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
+import { errorHandler } from './src/serveFiles/mdw';
 
 
 // configer dotenv
@@ -22,7 +23,7 @@ const port = process.env.PORT || 5000;
 // allow cors origin
 app.use(express.json());
 app.use(cors());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 const homeInfo: string = `
@@ -38,6 +39,9 @@ app.get("/", (req, res) => {
 
 app.use("/api/v1/users", userRoute);
 app.use("/api/v1/files", fileRoute);
+
+app.use(errorHandler);
+
 
 app.listen(port, () => {
     console.log(`Application is running on http://localhost:${port}`);
