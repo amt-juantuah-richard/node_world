@@ -28,7 +28,8 @@ app.use(cookieParser());
 
 const homeInfo: string = `
     <p>You can visit the following endpoints:</p>
-    <a href="#">/api/v1/servefiles</a>
+    <a href="#">/api/v1/users</a>
+    <a href="#">/api/v1/files</a>
 `;
 
 

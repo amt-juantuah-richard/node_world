@@ -5,9 +5,25 @@ import { Request, Response, NextFunction } from 'express';
 import pool from '../dtb';
 import { getAdmin } from './queries';
 
-interface ErrorWithStatusCode extends Error{
+export interface ErrorWithStatusCode extends Error{
     statusCode?: number;
+};
+
+export type Cb = (error: Error | null, filename: string | boolean) => void;
+
+
+/**
+ * set errors and pass them to the next function
+ * @param err error to pass
+ * @param code code to set as status code
+ * @param next next function
+ */
+export const setError = (err: Error | string, next: NextFunction, code?: number) => {
+    const er: ErrorWithStatusCode = typeof err === 'string' ? new Error(err) : err;
+    er.statusCode = code || undefined;
+    next(er);
 }
+
 
 /**
  * All inclusive Error Handling function
@@ -39,14 +55,11 @@ export const checkAdminStatus = (req: Request, res: Response, next: NextFunction
 
         pool.query(getAdmin, [id], (error, results) => {
             if (error) {
-                const er: ErrorWithStatusCode = error;
-                er.statusCode = 400;
-                next(er)
+                setError(error, next, 400);
             }
             else if (!results.rows.length) {
-                const er: ErrorWithStatusCode = new Error('You are not authorized to perform this action');
-                er.statusCode = 401;
-                next(er)
+                const errorMessage = 'You are not authorized to perform this action';
+                setError(errorMessage, next, 401);
             }
             else next();
         })

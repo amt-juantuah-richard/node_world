@@ -11,6 +11,9 @@
 ### Key Dependencies
     - pg
 node-postgres is a collection of node.js modules for interfacing with your PostgreSQL database. It has support for callbacks, promises, async/await, connection pooling, prepared statements, cursors, streaming results, C/C++ bindings, rich type parsing, and more! Just like PostgreSQL itself there are a lot of features: this documentation aims to get you up and running quickly and in the right direction. It also tries to provide guides for more advanced & edge-case topics allowing you to tap into the full power of PostgreSQL from node.js.
+    - Multer
+Multer is a node.js middleware for handling multipart/form-data, which is primarily used for uploading files. It is written on top of busboy for maximum efficiency.
+*NOTE*: Multer will not process any form which is not multipart (multipart/form-data)
 
 ### Scripts
 
