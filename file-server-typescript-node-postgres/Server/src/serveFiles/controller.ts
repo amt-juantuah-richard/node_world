@@ -5,9 +5,7 @@
 // required dependencies
 import { Request, Response, NextFunction } from 'express';
 import pool from './../dtb';
-import { setError } from './mdw';
-import path from 'path';
-import multer, { FileFilterCallback } from 'multer';
+import { deleteFileFromDisk, setError } from './mdw';
 import { 
     createOneUser, 
     getAllFiles, 
@@ -16,7 +14,10 @@ import {
     deleteOneUser, 
     updateOneUserUsername,
     updateOneUserPassword,
-    getOneUserById
+    getOneUserById,
+    uploadOneFile,
+    uploadPublicFile,
+    getPrivateFilesForUser
 } from './queries';
 
 
@@ -66,6 +67,8 @@ export const createUser = (req: Request, res: Response, next: NextFunction) => {
                             email: email
                         }               
                     });
+
+                    
                 }
             })
         }
@@ -298,43 +301,6 @@ export const updateAUserPassword = (req: Request, res: Response, next: NextFunct
 // interacting with the files table
 
 
-// set the storage engine to use
-const storage = multer.diskStorage({
-    destination: 'src/uploads/',
-    filename: function(req, file, cb) {
-        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
-    }
-})
-
-// check file type
-function checkFileType(file: any, cb: FileFilterCallback) {
-
-    // Allowed extensions
-    const filetypes = /doc|docx|html|htm|odt|pdf|xls|xlsx|ods|ppt|pptx|txt|jpeg|jpg|png|gif/;
-
-    // Check file extension
-    const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
-
-    // check file mime
-    const mimetype = filetypes.test(file.mimetype);
-
-    if (mimetype && extname) { 
-        return cb(null, true);
-    } else {
-        cb('Unkown file type: ' + file.mimetype + 'Only document and image files are allowed')
-    }
-}
-
-// upload entry point
-const upload = multer({
-    storage: storage,
-    limits: {fileSize: 10000000},
-    fileFilter: function(req, file, cb) {
-        checkFileType(file, cb);
-    }
-}).single('document')
-
-
 
 /**
  * Gets All files from db
@@ -354,4 +320,115 @@ export const getFiles = (req: Request, res: Response, next: NextFunction) => {
     } catch (error) {
         next(error);
     }
-} 
+};
+
+
+/**
+ * Upload one file as public file for all user
+ * @param req requet object
+ * @param res response object
+ */
+export const uploadOnePublicFile = (req: Request, res: Response, next: NextFunction) => {
+    try {
+
+        const { 
+            file_name,
+            file_description,
+            file_format,
+            file_url,
+            email
+        } = req.body;
+        if (!file_name || !file_description || !file_format || !file_url || !email) {
+            deleteFileFromDisk(req.file?.path || '');
+            const errorMessage = 'Document not saved in DB. Something went wrong';
+            setError(errorMessage, next, 400);
+        }
+        else {
+            
+            pool.query(uploadPublicFile,[file_name, file_description, file_format, file_url, email], (error, results) => {
+                if (error) {                    
+                    deleteFileFromDisk(req.file?.path || '');
+                    setError(error, next, 400);
+                }
+                else {
+                    res.status(201).json({
+                        success: true,
+                        message: "Document was saved Successfully with the following information",
+                        document: {
+                            ownerEmail: email,
+                            docName: file_name,
+                            url: file_url
+                        }               
+                    });
+                }
+            })
+        }
+        
+    } catch (error) {
+        deleteFileFromDisk(req.file?.path || '');
+        next(error);
+    }
+};
+
+
+/**
+ * Upload one file as private file for a user
+ * @param req requet object
+ * @param res response object
+ */
+export const uploadFile = (req: Request, res: Response, next: NextFunction) => {
+    try {
+
+        const { 
+            file_name,
+            file_description,
+            file_format,
+            file_url,
+            email
+        } = req.body;
+        if (!file_name || !file_description || !file_format || !file_url || !email) {
+            deleteFileFromDisk(req.file?.path || '');
+            const errorMessage = 'Document not saved in DB. Something went wrong';
+            setError(errorMessage, next, 400);
+        }
+        else {
+            
+            pool.query(uploadOneFile,[file_name, file_description, file_format, file_url, email], (error, results) => {
+                if (error) {                    
+                    deleteFileFromDisk(req.file?.path || '');
+                    setError(error, next, 400);
+                }
+                else {
+                    res.status(201).json({
+                        success: true,
+                        message: "Document was saved Successfully with the following information",
+                        document: {
+                            ownerEmail: email,
+                            docName: file_name,
+                            url: file_url
+                        }               
+                    });
+                }
+            })
+        }
+        
+    } catch (error) {
+        deleteFileFromDisk(req.file?.path || '');
+        next(error);
+    }
+};
+
+export const getPrivateFilesForOneUser = (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const email = req.body.email;
+        pool.query(getPrivateFilesForUser, [email], function (error, results) {
+            if (error) {
+                setError(error, next, 400);
+            }
+            else res.status(200).json(results.rows);
+        })
+    } catch (error) {
+        next(error);
+    }
+
+}
