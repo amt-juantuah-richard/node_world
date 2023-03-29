@@ -10,7 +10,7 @@ const cases = [
 
 // get all cases
 case1.get('/', (req, res, next) => {
-  res.json(cases);
+  res.download(cases);
 })
 
 // get a single case
