@@ -3,6 +3,7 @@ import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { ThemeContext } from '../Theme';
+import { FcDocument, FcFilingCabinet } from 'react-icons/fc';
 
 const Container = styled.div`
     width: 100vw;
@@ -77,6 +78,31 @@ const Mode = styled.p`
   }
 `;
 
+const AuthDiv = styled.div`
+    display: flex;
+    transition: all 400ms;
+    flex-flow: row;
+    align-items: center;
+    justify-content: space-around;
+    height: 60px;
+    width: 180px;
+    border: 1px solid #04a7c4;
+    border-radius: 5px;
+`;
+
+const Button = styled.button`
+    border-radius: 5px;
+    background: #04a7c46c;
+    height: 30px;
+    width: 75px;
+    font-size: 14px;
+    border: 1px solid #04a7c4;
+    cursor: pointer;
+    &:hover {
+        background-color: red;
+        color: #fff;
+    }
+`;
 
 
 const Navbar:React.FC = () => {
@@ -85,10 +111,15 @@ const Navbar:React.FC = () => {
     <Container>
         <Link to="/">
           <Div>
-            <Title>Where in the world...</Title>
-            <Span>is that country?</Span>
+            <Title>Documents Hub</Title>
+            <Title><FcDocument /><FcFilingCabinet/></Title>
           </Div>
         </Link>
+
+        <AuthDiv>
+          <Link to="/login"><Button>Login</Button> </Link>
+          <Link to="/register"><Button>Register</Button> </Link>
+        </AuthDiv>
         <Mode onClick={themeToggler}>
           <DarkModeOutlined />
           <Span>{theme === "light" ? 'Dark Mode' : 'Light Mode'}</Span>

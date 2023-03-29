@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Navbar from '../components/Navbar';
-import Countries from '../components/Countries';
+import Countries from '../components/Files';
 
 const Container = styled.div``;
 
