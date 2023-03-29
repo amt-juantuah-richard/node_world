@@ -1,0 +1,76 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300&display=swap');
+
+:root {
+  /* colors */
+  --color-text: hsl(200, 15%, 8%);
+  --color-background: hsl(0, 0%, 98%);
+  --color-elements: hsl(0, 0%, 100%);
+  --color-input: hsl(0, 0%, 52%);
+
+  /* text sizes */
+  --fontsize-title: 24px;
+  --fontsize-head: 32px;
+  --fontsize-subtitle: 18px;
+  --fontsize-home: 14px;
+  --fontsize-details: 16px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  outline: 0;
+  text-decoration: none;
+  font-family: 'Nunito Sans', sans-serif;
+  box-sizing: border-box;
+  color: var(--color-text);
+  transition: all 0.3s ease;
+}
+
+body {
+  font-weight: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  background-color: var(--color-background);
+  overflow-x: hidden;
+}
+
+/* ---------Light Theme--------- */
+/* .light {
+  --color-text: var(--color-text);
+  --color-background: var(--color-background);
+  --color-elements: var(--color-elements);  
+} */
+/* End of Light Theme */
+
+/* ---------Dark Theme--------- */
+.dark {
+  --color-text: hsl(0, 0%, 100%);
+  --color-background: hsl(207, 26%, 17%);
+  --color-elements: hsl(209, 23%, 22%);  
+}
+/* End of Dark Theme */
+
+h1 {
+  font-weight: 800;
+  font-size: var(--fontsize-head);
+  line-height: 44px;
+}
+
+h2 {
+  font-weight: 800;
+  font-size: var(--fontsize-title);
+  line-height: 33px;
+}
+
+h3 {
+  font-weight: 800;
+  font-size: var(--fontsize-subtitle);
+  line-height: 26px;
+}
+
+p {
+  font-size: var(--fontsize-home);
+}
