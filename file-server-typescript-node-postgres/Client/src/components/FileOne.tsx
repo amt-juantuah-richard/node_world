@@ -112,16 +112,12 @@ const Button = styled.button`
 `;
 
 type Props = {
-    country: {
-        [index: string]:any;
-    };
-    namecodes: {
-        [index: string]:string;
-    }
+    country: string;
+    namecodes: string;
 }
 
 
-const Country:React.FC<Props> = props => {
+const File:React.FC<Props> = props => {
     const { country, namecodes } = props;
     const [mailer, setMailer] = useState('none');
 
@@ -137,8 +133,8 @@ const Country:React.FC<Props> = props => {
         </Flag>
         <About>
             <WordBox>
-                <Words><b>Title: </b> { country.population}</Words>
-                <Words><b>Description: </b> { country.region}</Words>
+                <Words><b>Title: </b> { country}</Words>
+                <Words><b>Description: </b> { country}</Words>
                 <ButtomDiv>
                     <Button style={{border: '1px solid #edf420'}} >Download</Button>
                     <Button style={{border: '1px solid #f22d2d'}} onClick={handleSendMail}>{mailer === 'none' ? "Open" : "Close"} Mail Deck</Button>
@@ -155,4 +151,4 @@ const Country:React.FC<Props> = props => {
   )
 }
 
-export default Country
+export default File;

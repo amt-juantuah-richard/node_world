@@ -1,9 +1,10 @@
 import { DarkModeOutlined } from '@mui/icons-material';
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { ThemeContext } from '../Theme';
 import { FcDocument, FcFilingCabinet } from 'react-icons/fc';
+import { UserContext } from '../AuthContext';
 
 const Container = styled.div`
     width: 100vw;
@@ -100,26 +101,42 @@ const Button = styled.button`
     cursor: pointer;
     &:hover {
         background-color: red;
-        color: #fff;
+        color: #fbcece;
     }
+`;
+
+const UserSpan = styled.span`
+  margin-left: 20px;
+  font-size: 12px !important;
 `;
 
 
 const Navbar:React.FC = () => {
-  const {theme, themeToggler} = useContext(ThemeContext)
+  const {theme, themeToggler} = useContext(ThemeContext);
+  const { user, logout } = useContext(UserContext);
+
   return (
     <Container>
         <Link to="/">
           <Div>
-            <Title>Documents Hub</Title>
-            <Title><FcDocument /><FcFilingCabinet/></Title>
+              { user && user.isadmin ?
+                <Title style={{color: "red"}}>Documents Hub Administrator</Title>
+                : <Title>Documents Hub</Title>
+              }
+            <Title><FcDocument /><FcFilingCabinet/><UserSpan>{user && user.id ? user.username : 'Not Logged In'}</UserSpan></Title>
           </Div>
         </Link>
 
-        <AuthDiv>
-          <Link to="/login"><Button>Login</Button> </Link>
-          <Link to="/register"><Button>Register</Button> </Link>
-        </AuthDiv>
+        { user && user.id ?
+          <AuthDiv>
+              <Button onClick={logout}>Logout</Button>       
+          </AuthDiv>
+          :
+          <AuthDiv>
+              <Link to="/login"><Button>Login</Button> </Link>
+              <Link to="/register"><Button>Register</Button> </Link>        
+          </AuthDiv>
+        }
         <Mode onClick={themeToggler}>
           <DarkModeOutlined />
           <Span>{theme === "light" ? 'Dark Mode' : 'Light Mode'}</Span>

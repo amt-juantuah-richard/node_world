@@ -1,0 +1,9 @@
+/*Your PostgreSQL script goes here*/
+with att as (SELECT (date_part('year', date)) as year, (extract(quarter from date)) as quarter, (profit-loss) as net_profit
+from accounting
+order by year)
+select year, quarter, sum(net_profit)
+from att
+group by (year, quarter);
+
+post 1 question 2

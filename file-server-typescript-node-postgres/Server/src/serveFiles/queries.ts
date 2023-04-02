@@ -14,7 +14,7 @@ export const createFilesTable = "create table files (file_id uuid DEFAULT uuid_g
 // files queries
 export const getAllFiles = 'SELECT * FROM files';
 
-export const uploadOneFile = 'INSERT INTO files (file_name, file_description, file_format, file_url, user_email) VALUES ($1, $2, $3, $4, $5)';
+export const uploadOneFile = 'INSERT INTO files (file_name, file_description, file_format, file_url, user_email, file_title) VALUES ($1, $2, $3, $4, $5, $6)';
 
 export const uploadPublicFile = 'INSERT INTO files (file_name, file_description, file_format, file_url, user_email, privacy) VALUES ($1, $2, $3, $4, $5, \'public\')';
 

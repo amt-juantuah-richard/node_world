@@ -1,0 +1,40 @@
+[
+  {
+    "_id": "a1e02314-7941-4428-8490-f58a5a6ec0c5",
+    "colId": "history",
+    "containerId": "",
+    "name": "localhost:5000/api/v1/users/login",
+    "url": "localhost:5000/api/v1/users/login",
+    "method": "GET",
+    "sortNum": 0,
+    "created": "2023-04-01T15:02:13.178Z",
+    "modified": "2023-04-01T15:02:13.178Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"username\": \"example\",\n  \"password\": \"example\"\n}",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "3c406ad3-64e7-43fc-ad82-04028c0d7cd6",
+    "colId": "history",
+    "containerId": "",
+    "name": "localhost:5000/api/v1/users/login",
+    "url": "localhost:5000/api/v1/users/login",
+    "method": "POST",
+    "sortNum": 0,
+    "created": "2023-04-01T15:02:26.405Z",
+    "modified": "2023-04-01T15:02:26.405Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"username\": \"example\",\n  \"password\": \"example\"\n}",
+      "form": []
+    },
+    "tests": []
+  }
+]

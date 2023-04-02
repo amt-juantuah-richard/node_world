@@ -48,10 +48,11 @@ export const errorHandler = (err: any, req: Request, res: Response, next: NextFu
     const errStatus = err.statusCode || 500;
     const errMessage = err.message || 'An error occurred.Something went wrong!!';
     res.status(errStatus).json({
-        success: false,
+        ok: false,
         status: errStatus,
         message: errMessage,
-        stack: process.env.NODE_ENV === 'development' ? err.stack : {}
+        stack: err.stack
+        // stack: process.env.NODE_ENV === 'development' ? err.stack : {}
     })
 } 
 

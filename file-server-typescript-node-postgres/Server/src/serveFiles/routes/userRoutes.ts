@@ -14,8 +14,8 @@ import {
 const router = Router();
 
 router.get("/", checkAdminStatus, getUsers);
-router.post("/", createUser);
-router.get("/:username/:password", getAUserByUsernameAndPassword);
+router.post("/register", createUser);
+router.post("/login", getAUserByUsernameAndPassword);
 router.get("/:id", checkAdminStatus, getAUserById);
 router.delete("/:id", checkAdminStatus, deleteAUserById);
 router.put("/username", updateAUserUsername);

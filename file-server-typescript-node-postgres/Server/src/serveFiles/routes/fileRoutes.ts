@@ -15,7 +15,7 @@ import {
 const router = Router();
 // TODO implement route for admin to load public files
 router.get("/", checkAdminStatus, getFiles);
-router.get("/:id", checkUserStatus, getPrivateFilesForOneUser);
+router.get("/:id/:email", checkUserStatus, getPrivateFilesForOneUser);
 router.post("/upload/:id", checkUserStatus, upLoadOneFile, uploadFile);
 router.post("/upload/admin/:id", checkAdminStatus, upLoadOneFile, uploadOnePublicFile);
 

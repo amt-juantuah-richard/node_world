@@ -1,9 +1,12 @@
 import { SearchRounded } from '@mui/icons-material';
-import React, { SyntheticEvent, useEffect, useState } from 'react';
+import React, { SyntheticEvent, useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import Country from './FileOne';
+import File from './FileOne';
 import axios from 'axios';
 import FormInput from './FormInput';
+import { UserContext } from '../AuthContext';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 
 const Container = styled.div`
     width: 100vw;
@@ -111,6 +114,13 @@ const Word = styled.span`
     font-size: 14px;
 `;
 
+const NotLogWord = styled.span`
+    text-align: center;
+    margin: 18px auto;
+    font-weight: 300;
+    font-size: 13px;
+`;
+
 const Form = styled.form`
     display: flex;
     flex-flow: column;
@@ -155,9 +165,44 @@ const Button = styled.button`
     margin-top: 5px;
 `;
 
+const Error = styled.p`
+    color: red;
+`;
+
+const SuccessMessage = styled.div`
+    height: auto
+    width: 250px;
+    margin: 10px auto;
+    padding: 10px;
+    color: green;
+    background-color: #000;
+    border-radius: 5;
+    display: flex;
+    flex-flow: column;
+    font-family: monospace;
+    align-items: center;
+    justify-content: center;
+`;
+
+const FailureMessage = styled.div`
+    height: auto
+    width: 250px;
+    margin: 10px auto;
+    padding: 10px;
+    color: red;
+    background-color: #000;
+    border-radius: 5;
+    display: flex;
+    flex-flow: column;
+    font-family: monospace;
+    align-items: center;
+    justify-content: center;
+`;
+
+
 type Props = {
-    country: UnstructuredObject;
-    allCountries: UnstructuredObject[];
+    file: UnstructuredObject;
+    allFiles: UnstructuredObject[];
 }
 
 type UnstructuredObject = {
@@ -165,27 +210,85 @@ type UnstructuredObject = {
 }
 
 
-const Countries: React.FC<Props> = props => {
-    const { country, allCountries } = props;
+const Files: React.FC<Props> = props => {
 
-    const [countries, setCountries] = useState(allCountries);
-    const [filteredCountries, filteredCountriesSet] = useState(allCountries);
-    const [singleCountry, singleCountrySet] = useState(allCountries);
-    const [noresults, noresultsSet] = useState(false);
-    const [nameCode, nameCodeSet] = useState(country);
+    const { file, allFiles } = props;
+
+    const {user} = useContext(UserContext);
+    const [success, setSuccess] = useState('');
+    const [failure, setFailure] = useState('');
+    
+    const [files, setFiles] = useState(allFiles);
+
+    
+
+    const formik = useFormik({
+        initialValues: {file_title: '', file_description: ''},
+        validationSchema: Yup.object({
+            file_title: Yup.string()
+                .required('Title is required')
+                .min(5, 'Title is too short')
+                .max(30, 'Title is too long'), 
+            file_description: Yup.string()
+                .required('Description is required')
+                .min(10, 'Decription is too short')
+                .max(200, 'Description is too long'), 
+            document: Yup.mixed()
+                .required('File is required'),
+        }),
+        onSubmit: async (values, action) => {
+            const vals = {...values, email: user?.email};
+            action.resetForm();
+            setSuccess("Uploading your file... Please wait");
+            try {
+                const uploadedFile = await axios.post(`http://localhost:5000/api/v1/files/upload/${user?.id}`, vals, {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                      },
+                });
+
+                if (uploadedFile.data.ok) {
+                    setSuccess(uploadedFile.data.message);
+                }
+                else if (!uploadedFile.data.ok) setFailure(uploadedFile.data.message);
+                setTimeout(()=>{
+                    setFailure('');
+                    setSuccess('');
+                },3000)
+                
+            } catch (error: any) {
+                const msg: string = error.response.data.message;
+                setFailure(msg);
+                setTimeout(()=>{
+                    setFailure('');
+                    setSuccess('');
+                },3000)
+            }
+        }
+
+    })
+
+   
+    // const [filteredCountries, filteredCountriesSet] = useState(allCountries);
+    // const [singleCountry, singleCountrySet] = useState(allCountries);
+    // const [noresults, noresultsSet] = useState(false);
+    // const [nameCode, nameCodeSet] = useState(country);
 
     useEffect( () => {
         const getData = async () => {
             try {
-                const { data } = await axios.get<typeof allCountries>(
-                    "https://restcountries.com/v3.1/all",
-                    {
-                        headers: {
-                            Accept: 'application/json',
-                          },
-                    }
-                );
-                setCountries(data);
+                if (user && user.id) {
+                    const { data } = await axios.get(
+                        `http://localhost/api/v1/files/${user.id}/${user.email}`,
+                        {
+                            headers: {
+                                Accept: 'application/json',
+                            },
+                        }
+                    );
+                    setFiles(data);
+                    console.log(files);
+                }
             } catch (error) {
                 console.log(error);
             }
@@ -193,30 +296,32 @@ const Countries: React.FC<Props> = props => {
         getData();
     },[]);
 
-    useEffect( () => {
-        filteredCountriesSet(countries);
-        let names:UnstructuredObject = {};
-        countries.forEach(item  => names[item.cca3] = item.name.common);
+    // useEffect( () => {
+    //     filteredCountriesSet(countries);
+    //     let names:UnstructuredObject = {};
+    //     countries.forEach(item  => names[item.cca3] = item.name.common);
         
-        nameCodeSet(names)
-    }, [countries])
+    //     nameCodeSet(names)
+    // }, [countries])
 
-    const handleSearch:React.ReactEventHandler<HTMLInputElement> = (ev:SyntheticEvent<HTMLInputElement, Event>) => {
-        if (ev.target) {
-            const query:string = ((ev.target as HTMLInputElement).value).toUpperCase();
-            singleCountrySet(filteredCountries.filter((nation:UnstructuredObject) => (nation.name.common).toUpperCase().includes(query)));
-            if (query) {
-                noresultsSet(true)
-            } else noresultsSet(false)
-        }
-    }
+    // const handleSearch:React.ReactEventHandler<HTMLInputElement> = (ev:SyntheticEvent<HTMLInputElement, Event>) => {
+    //     if (ev.target) {
+    //         const query:string = ((ev.target as HTMLInputElement).value).toUpperCase();
+    //         singleCountrySet(filteredCountries.filter((nation:UnstructuredObject) => (nation.name.common).toUpperCase().includes(query)));
+    //         if (query) {
+    //             noresultsSet(true)
+    //         } else noresultsSet(false)
+    //     }
+    // }
 
-    const handleFilter:React.ReactEventHandler<HTMLSelectElement> = (ev:SyntheticEvent<HTMLSelectElement, Event>) => {
-        if (ev.target) {
-            const query:string = ((ev.target as HTMLInputElement).value);
-            filteredCountriesSet(countries.filter((nation:UnstructuredObject) => nation.region.includes(query)));
-        }
-    }
+    // const handleFilter:React.ReactEventHandler<HTMLSelectElement> = (ev:SyntheticEvent<HTMLSelectElement, Event>) => {
+    //     if (ev.target) {
+    //         const query:string = ((ev.target as HTMLInputElement).value);
+    //         filteredCountriesSet(countries.filter((nation:UnstructuredObject) => nation.region.includes(query)));
+    //     }
+    // }
+
+
 
   return (
     <Container>
@@ -225,35 +330,65 @@ const Countries: React.FC<Props> = props => {
                 <SearchIconBox>
                     <SearchRounded />
                 </SearchIconBox>
-                <Search type="text" onChange={handleSearch} placeholder="Search for a country..."/>
+                <Search type="text" /*onChange={handleSearch}*/ placeholder="Search for a file..."/>
             </SearchBox>
             <SelectBox>
-                <Form method="post" encType="multipart/form-data">
+                {!failure && success ? <SuccessMessage>{success}</SuccessMessage> : ''}
+                {failure ? <FailureMessage>{failure}</FailureMessage> : ''}
+                <Form onSubmit={formik.handleSubmit} encType="multipart/form-data">
                     <Word>Have a Document to add to your Store Here?</Word>
-                    <Input type='text' placeholder='Enter doc title' />
-                    <Input type='text' placeholder='Enter doc desc' />
-                    <Select>
-                        <Option>--Choose file privacy--</Option>
-                        <Option value='private'>private</Option>
-                        <Option value='public'>public</Option>
-                    </Select>
-                    <Input type='file' name='document' />
-                    <Button>Save</Button>
+                    { user && user.id ?
+                        <>
+                            <Input onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.file_title} type='text' name='file_title' placeholder='Enter doc title' />
+                            <Error>{formik.errors.file_title && formik.touched.file_title && formik.errors.file_title}</Error>
+                            <Input onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.file_description} type='text' name='file_description' placeholder='Enter doc description' />
+                            <Error>{formik.errors.file_description && formik.touched.file_description && formik.errors.file_description}</Error>
+                            {user && user.isadmin ?
+                                <Select name='privacy'>
+                                    <Option>--Choose file privacy--</Option>
+                                    <Option value='private'>private</Option>
+                                    <Option value='public'>public</Option>
+                                </Select>
+                                : ''
+                            }
+                            <Input required onChange={(e) => {
+                                if(e.currentTarget.files) {                                
+                                    formik.setFieldValue('document', e.currentTarget.files[0])}}} onBlur={formik.handleBlur}  type='file' name='document' />
+                            {/* <Error>{formik.errors.document && formik.touched.document && formik.errors.document}</Error> */}
+                            <Button type='submit'>Save</Button>
+                        </>
+                        : <NotLogWord>Create account or Log in to add files to your personal documents store</NotLogWord>
+                    }
                 </Form>
             </SelectBox>
         </FilterBox>
 
-        {noresults && <Word>--{singleCountry.length} search results--</Word>}
-        <All style={{justifyContent: `${noresults? "space-evenly" : "space-between"}`}}>
-            {
-               (singleCountry.length) ? 
-                    singleCountry.map((item, index ) => (<Country key={index} country={item} namecodes={nameCode} />))
-                    : 
-                    filteredCountries.map((item, index )=> (<Country key={index} country={item} namecodes={nameCode} />))
-            }
+        <All style={{justifyContent: "space-evenly"}}>
+            <File country="jkjkjjk" namecodes="hjhjhjh" />
+            <File country="jkjkjjk" namecodes="hjhjhjh" />
+            <File country="jkjkjjk" namecodes="hjhjhjh" />
+            <File country="jkjkjjk" namecodes="hjhjhjh" />
+            <File country="jkjkjjk" namecodes="hjhjhjh" />
+            <File country="jkjkjjk" namecodes="hjhjhjh" />
+            <File country="jkjkjjk" namecodes="hjhjhjh" />
+            <File country="jkjkjjk" namecodes="hjhjhjh" />
+            <File country="jkjkjjk" namecodes="hjhjhjh" />
+            <File country="jkjkjjk" namecodes="hjhjhjh" />
+            <File country="jkjkjjk" namecodes="hjhjhjh" />
+            <File country="jkjkjjk" namecodes="hjhjhjh" />
+            <File country="jkjkjjk" namecodes="hjhjhjh" />
+            <File country="jkjkjjk" namecodes="hjhjhjh" />
+            <File country="jkjkjjk" namecodes="hjhjhjh" />
+            <File country="jkjkjjk" namecodes="hjhjhjh" />
+            <File country="jkjkjjk" namecodes="hjhjhjh" />
+            <File country="jkjkjjk" namecodes="hjhjhjh" />
+            <File country="jkjkjjk" namecodes="hjhjhjh" />
+            <File country="jkjkjjk" namecodes="hjhjhjh" />
+            <File country="jkjkjjk" namecodes="hjhjhjh" />
+            <File country="jkjkjjk" namecodes="hjhjhjh" />
         </All>
     </Container>
   )
 } 
 
-export default Countries
+export default Files;

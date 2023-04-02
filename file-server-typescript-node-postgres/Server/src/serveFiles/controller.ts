@@ -51,7 +51,7 @@ export const createUser = (req: Request, res: Response, next: NextFunction) => {
         const { username, email, password } = req.body;
         if (!username || !email || !password) {
             const errorMessage = 'username and email and password are required fields. At least one of them is missing or wrong';
-            setError(errorMessage, next, 400);
+            setError(errorMessage, next, 422);
         }
         else {
             pool.query(createOneUser, [username, email, password], (error, results) => {
@@ -60,8 +60,8 @@ export const createUser = (req: Request, res: Response, next: NextFunction) => {
                 }
                 else {
                     res.status(201).json({
-                        success: true,
-                        message: "User was created Successfully with the following information",
+                        ok: true,
+                        message: "Account was created Successfully. You can Log in with your credentials",
                         user: {
                             username: username,
                             email: email
@@ -87,11 +87,11 @@ export const createUser = (req: Request, res: Response, next: NextFunction) => {
 export const getAUserByUsernameAndPassword = (req: Request, res: Response, next: NextFunction) => {
     try {
 
-        const { username, password } = req.params;
+        const { username, password } = req.body;
 
         if (!username || !password) {
             const errorMessage = 'username and password are required fields. At least one of them is missing or wrong';
-            setError(errorMessage, next, 400);
+            setError(errorMessage, next, 422);
         }
         else {
             pool.query(getOneUserByUsernameAndPassword, [username, password], (error, results) => {
@@ -100,7 +100,11 @@ export const getAUserByUsernameAndPassword = (req: Request, res: Response, next:
                 }
                 else {
                     const {password, ...user} = results.rows[0];
-                    res.status(200).json(user);
+                    res.status(200).json({
+                        ok: true,
+                        message: "Welcome Back",
+                        user: user
+                    });
                 };
             })
         }
@@ -174,7 +178,7 @@ export const deleteAUserById = (req: Request, res: Response, next: NextFunction)
                         } 
                         else if (results.rowCount) {
                             res.status(200).json({
-                                success: true,
+                                ok: true,
                                 message: "Account deleted successfully"              
                             });
                         }
@@ -226,7 +230,7 @@ export const updateAUserUsername = (req: Request, res: Response, next: NextFunct
                         } 
                         else if (results.rowCount) {
                             res.status(200).json({
-                                success: true,
+                                ok: true,
                                 message: "Account updated successfully"              
                             });
                         }
@@ -278,7 +282,7 @@ export const updateAUserPassword = (req: Request, res: Response, next: NextFunct
                         } 
                         else if (results.rowCount) {
                             res.status(200).json({
-                                success: true,
+                                ok: true,
                                 message: "Account updated successfully"              
                             });
                         }
@@ -332,14 +336,15 @@ export const uploadOnePublicFile = (req: Request, res: Response, next: NextFunct
     try {
 
         const { 
+            file_title,
             file_name,
             file_description,
             file_format,
             file_url,
             email
         } = req.body;
-        if (!file_name || !file_description || !file_format || !file_url || !email) {
-            deleteFileFromDisk(req.file?.path || '');
+        if (!file_title || !file_name || !file_description || !file_format || !file_url || !email) {
+            req.file? deleteFileFromDisk(req.file?.path) : '';
             const errorMessage = 'Document not saved in DB. Something went wrong';
             setError(errorMessage, next, 400);
         }
@@ -347,17 +352,18 @@ export const uploadOnePublicFile = (req: Request, res: Response, next: NextFunct
             
             pool.query(uploadPublicFile,[file_name, file_description, file_format, file_url, email], (error, results) => {
                 if (error) {                    
-                    deleteFileFromDisk(req.file?.path || '');
+                    req.file? deleteFileFromDisk(req.file?.path) : '';
                     setError(error, next, 400);
                 }
                 else {
                     res.status(201).json({
-                        success: true,
+                        ok: true,
                         message: "Document was saved Successfully with the following information",
                         document: {
                             ownerEmail: email,
                             docName: file_name,
-                            url: file_url
+                            url: file_url,
+                            file_title
                         }               
                     });
                 }
@@ -380,32 +386,34 @@ export const uploadFile = (req: Request, res: Response, next: NextFunction) => {
     try {
 
         const { 
+            file_title,
             file_name,
             file_description,
             file_format,
             file_url,
             email
         } = req.body;
-        if (!file_name || !file_description || !file_format || !file_url || !email) {
-            deleteFileFromDisk(req.file?.path || '');
-            const errorMessage = 'Document not saved in DB. Something went wrong';
+        if (!file_title || !file_name || !file_description || !file_format || !file_url || !email) {
+            req.file? deleteFileFromDisk(req.file?.path) : '';;
+            const errorMessage = 'Document not saved in DB. Required fields not provided';
             setError(errorMessage, next, 400);
         }
         else {
-            
-            pool.query(uploadOneFile,[file_name, file_description, file_format, file_url, email], (error, results) => {
+           
+            pool.query(uploadOneFile,[file_name, file_description, file_format, file_url, email, file_title], (error, results) => {
                 if (error) {                    
-                    deleteFileFromDisk(req.file?.path || '');
+                    req.file? deleteFileFromDisk(req.file?.path) : '';
                     setError(error, next, 400);
                 }
                 else {
                     res.status(201).json({
-                        success: true,
-                        message: "Document was saved Successfully with the following information",
+                        ok: true,
+                        message: "Document was saved Successfully",
                         document: {
                             ownerEmail: email,
                             docName: file_name,
-                            url: file_url
+                            url: file_url,
+                            fileFormat: file_format
                         }               
                     });
                 }
@@ -420,7 +428,7 @@ export const uploadFile = (req: Request, res: Response, next: NextFunction) => {
 
 export const getPrivateFilesForOneUser = (req: Request, res: Response, next: NextFunction) => {
     try {
-        const email = req.body.email;
+        const email = req.params.email;
         pool.query(getPrivateFilesForUser, [email], function (error, results) {
             if (error) {
                 setError(error, next, 400);
