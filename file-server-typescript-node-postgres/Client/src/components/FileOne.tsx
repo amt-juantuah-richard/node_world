@@ -112,31 +112,48 @@ const Button = styled.button`
 `;
 
 type Props = {
-    country: string;
-    namecodes: string;
+    docFile: {[key: string]:any};
 }
 
 
 const File:React.FC<Props> = props => {
-    const { country, namecodes } = props;
+    const { docFile } = props;
     const [mailer, setMailer] = useState('none');
 
     const handleSendMail = () => {
         setMailer(mailer === 'none' ? 'flex' : 'none');
     }
 
+    let format;
+    switch (docFile.file_format.split("/")[1]) {
+        case 'pdf':
+            format = <GrDocumentPdf />;
+            break;
+        default:
+            format = docFile.file_format.split("/")[1]
+    }
+
+    const handleDownload = () => {
+        const newAnchorTag = document.createElement('a')
+        newAnchorTag.href = docFile.file_url;
+        newAnchorTag.download = docFile.file_url.split("/").pop();
+        document.body.appendChild(newAnchorTag);
+        newAnchorTag.click();
+        document.body.removeChild(newAnchorTag);
+    }
+
   return (
     
     <Container>
         <Flag>
-            <GrDocumentPdf />
+            {format}
         </Flag>
         <About>
             <WordBox>
-                <Words><b>Title: </b> { country}</Words>
-                <Words><b>Description: </b> { country}</Words>
+                <Words><b>Title: </b> { docFile.file_title}</Words>
+                <Words><b>Description: </b> { docFile.file_description }</Words>
                 <ButtomDiv>
-                    <Button style={{border: '1px solid #edf420'}} >Download</Button>
+                    <Button onClick={handleDownload} style={{border: '1px solid #edf420'}} >Download</Button>
                     <Button style={{border: '1px solid #f22d2d'}} onClick={handleSendMail}>{mailer === 'none' ? "Open" : "Close"} Mail Deck</Button>
                 </ButtomDiv>
             </WordBox>

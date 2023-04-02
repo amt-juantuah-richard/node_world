@@ -1,8 +1,8 @@
 // import dependencies
 import express from 'express';
 import dotenv from 'dotenv';
-import ejs from 'ejs';
 import cors from 'cors';
+import path from 'path';
 import userRoute from './src/serveFiles/routes/userRoutes';
 import fileRoute from './src/serveFiles/routes/fileRoutes';
 import cookieParser from 'cookie-parser';
@@ -16,11 +16,11 @@ dotenv.config();
 const app = express();
 
 
-// set ejs engine
-app.set('view engine', 'ejs');
-
 // set up port number
 const port = process.env.PORT || 5000;
+
+const FILES = path.join(__dirname, 'public');
+app.use(express.static(FILES));
 
 // general middlewares for all endpoints:
 // allow json parsing
@@ -42,8 +42,12 @@ app.get("/", (req, res) => {
     res.send(homeInfo);
 });
 
-// public folder as static content
-app.use(express.static('./public'));
+// app.get("/public/uploads/:filename", (req, res) => {
+    
+//     console.log(req.params.filename)
+//     console.log(req.baseUrl)
+//     res.send(`<a href="${req.params.filename}">download</a>`);
+// });
 
 // routes
 app.use("/api/v1/users", userRoute);

@@ -15,6 +15,7 @@ const Container = styled.div`
     position: relative;
     display: flex;
     flex-flow: column;
+    transition: all 700ms;
     @media screen and (max-width: 480px) {
         padding-left: 28px;
         padding-right: 28px;
@@ -249,6 +250,7 @@ const Files: React.FC<Props> = props => {
 
                 if (uploadedFile.data.ok) {
                     setSuccess(uploadedFile.data.message);
+                    setFiles([uploadedFile.data.document, ...files])
                 }
                 else if (!uploadedFile.data.ok) setFailure(uploadedFile.data.message);
                 setTimeout(()=>{
@@ -276,16 +278,21 @@ const Files: React.FC<Props> = props => {
 
     useEffect( () => {
         const getData = async () => {
+            console.log("started")
             try {
                 if (user && user.id) {
+                    console.log("user exists")
+                    console.log(`about to send request to http://localhost:5000/api/v1/files/${user.id}/${user.email}`)
+
                     const { data } = await axios.get(
-                        `http://localhost/api/v1/files/${user.id}/${user.email}`,
+                        `http://localhost:5000/api/v1/files/${user.id}/${user.email}`,
                         {
                             headers: {
                                 Accept: 'application/json',
                             },
                         }
                     );
+                    if (data) console.log("got data for you: ", data)
                     setFiles(data);
                     console.log(files);
                 }
@@ -296,13 +303,7 @@ const Files: React.FC<Props> = props => {
         getData();
     },[]);
 
-    // useEffect( () => {
-    //     filteredCountriesSet(countries);
-    //     let names:UnstructuredObject = {};
-    //     countries.forEach(item  => names[item.cca3] = item.name.common);
-        
-    //     nameCodeSet(names)
-    // }, [countries])
+   
 
     // const handleSearch:React.ReactEventHandler<HTMLInputElement> = (ev:SyntheticEvent<HTMLInputElement, Event>) => {
     //     if (ev.target) {
@@ -364,28 +365,10 @@ const Files: React.FC<Props> = props => {
         </FilterBox>
 
         <All style={{justifyContent: "space-evenly"}}>
-            <File country="jkjkjjk" namecodes="hjhjhjh" />
-            <File country="jkjkjjk" namecodes="hjhjhjh" />
-            <File country="jkjkjjk" namecodes="hjhjhjh" />
-            <File country="jkjkjjk" namecodes="hjhjhjh" />
-            <File country="jkjkjjk" namecodes="hjhjhjh" />
-            <File country="jkjkjjk" namecodes="hjhjhjh" />
-            <File country="jkjkjjk" namecodes="hjhjhjh" />
-            <File country="jkjkjjk" namecodes="hjhjhjh" />
-            <File country="jkjkjjk" namecodes="hjhjhjh" />
-            <File country="jkjkjjk" namecodes="hjhjhjh" />
-            <File country="jkjkjjk" namecodes="hjhjhjh" />
-            <File country="jkjkjjk" namecodes="hjhjhjh" />
-            <File country="jkjkjjk" namecodes="hjhjhjh" />
-            <File country="jkjkjjk" namecodes="hjhjhjh" />
-            <File country="jkjkjjk" namecodes="hjhjhjh" />
-            <File country="jkjkjjk" namecodes="hjhjhjh" />
-            <File country="jkjkjjk" namecodes="hjhjhjh" />
-            <File country="jkjkjjk" namecodes="hjhjhjh" />
-            <File country="jkjkjjk" namecodes="hjhjhjh" />
-            <File country="jkjkjjk" namecodes="hjhjhjh" />
-            <File country="jkjkjjk" namecodes="hjhjhjh" />
-            <File country="jkjkjjk" namecodes="hjhjhjh" />
+            { files.map((item, index) => 
+                <File key={index} docFile={item} />
+            )
+            }            
         </All>
     </Container>
   )

@@ -410,10 +410,12 @@ export const uploadFile = (req: Request, res: Response, next: NextFunction) => {
                         ok: true,
                         message: "Document was saved Successfully",
                         document: {
-                            ownerEmail: email,
-                            docName: file_name,
-                            url: file_url,
-                            fileFormat: file_format
+                            file_description: file_description,
+                            file_title: file_title,
+                            file_name: file_name,
+                            file_format: file_format,
+                            file_url: file_url,   
+                            user_email: email
                         }               
                     });
                 }
