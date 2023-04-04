@@ -1,8 +1,21 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 import styled from 'styled-components';
-import { GrDocumentPdf } from 'react-icons/gr';
+import fileDownload from 'js-file-download';
+import { 
+    GrDocumentPdf, 
+    GrDocumentPpt, 
+    GrDocumentWord,
+    GrDocumentTxt,
+    GrDocumentExcel,
+    GrDocumentText,
+    GrDocument,
+    GrDocumentImage,
+    GrDownload
+} from 'react-icons/gr';
 import { Send } from '@mui/icons-material';
+
 
 const Container = styled.div`
     width: 255px;
@@ -12,6 +25,7 @@ const Container = styled.div`
     box-shadow: 0px 0px 6px 2px rgba(0, 0, 0, 0.0294384);
     border-radius: 5px;
     transition: all 0.3s;
+    position: relative;
     &:hover {
         transform: scale(1.02);
         box-shadow: 0px 0px 8px 2px rgba(0, 0, 0, 0.384);
@@ -26,6 +40,7 @@ const Flag = styled.div`
     align-items: center;
     justify-content: center;
     border-radius: 5px 5px 0 0;
+    position: relative;
 `;
 
 const About = styled.div`
@@ -97,6 +112,26 @@ const ButtomDiv = styled.div`
     justify-content: space-between;
 `;
 
+const Downs = styled.div`
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: 2px;
+    width: auto;
+    height: 20px;
+    display: flex;
+    flex-flow: row;
+    gap: 2px;
+    padding: 3px;
+    border-radius: 5px 0 3px 0;
+    background-color: #04c467;
+    & p {
+        color: red;
+        font-size: 12px;
+        font-family: monospace;
+    };
+`;
+
 const Button = styled.button`
     border-radius: 5px;
     background: none;
@@ -111,6 +146,8 @@ const Button = styled.button`
     }
 `;
 
+
+
 type Props = {
     docFile: {[key: string]:any};
 }
@@ -119,41 +156,76 @@ type Props = {
 const File:React.FC<Props> = props => {
     const { docFile } = props;
     const [mailer, setMailer] = useState('none');
+    const [downs, setDowns] = useState(parseInt(docFile.downloads));
 
     const handleSendMail = () => {
         setMailer(mailer === 'none' ? 'flex' : 'none');
     }
 
+    
+
     let format;
-    switch (docFile.file_format.split("/")[1]) {
-        case 'pdf':
+    const formatString = docFile.file_format.split("/")[1]
+     if (formatString) {
+        if (formatString === 'pdf') {
             format = <GrDocumentPdf />;
-            break;
-        default:
-            format = docFile.file_format.split("/")[1]
+        }            
+        else if (['doc', 'docx', 'ods', 'odt'].includes(formatString)) {
+            format = <GrDocumentWord />;
+        }            
+        else if (['xls', 'xlsx'].includes(formatString)) {
+            format = <GrDocumentExcel />;
+        }            
+        else if (formatString ==='ppt' || 'pptx') {
+            format = <GrDocumentPpt />;
+        }            
+        else if (formatString === 'txt') {
+            format = <GrDocumentTxt />;
+        }            
+        else if (formatString === 'text') {
+            format = <GrDocumentText />;
+        }            
+        else if (['jpeg', 'jpg', 'png', 'gif'].includes(formatString)) {
+            format = <GrDocumentImage />;
+        }            
+        else {
+            format = <GrDocument />;
+        }
     }
 
-    const handleDownload = () => {
-        const newAnchorTag = document.createElement('a')
-        newAnchorTag.href = docFile.file_url;
-        newAnchorTag.download = docFile.file_url.split("/").pop();
-        document.body.appendChild(newAnchorTag);
-        newAnchorTag.click();
-        document.body.removeChild(newAnchorTag);
+    const handleDownload = async () => {
+        try {
+            const {data} = await axios.post(`http://localhost:5000/api/v1/files/download`, { file_name: docFile.file_name}, 
+                {
+                    responseType: "blob"
+                }
+            );
+
+            if (data) {
+                fileDownload(data, docFile.file_name);
+                setDowns(downs + 1);
+            }            
+        } catch (error) {
+            console.log(error)
+        }
     }
+
 
   return (
     
     <Container>
         <Flag>
             {format}
+            <Downs>
+                <p>{ downs } downloads</p>
+            </Downs>
         </Flag>
         <About>
             <WordBox>
                 <Words><b>Title: </b> { docFile.file_title}</Words>
-                <Words><b>Description: </b> { docFile.file_description }</Words>
-                <ButtomDiv>
-                    <Button onClick={handleDownload} style={{border: '1px solid #edf420'}} >Download</Button>
+                <Words><b>Desc: </b> { docFile.file_description }</Words>
+                <ButtomDiv>                
+                    <Button onClick={handleDownload} style={{border: '1px solid #edf420'}} >Download <GrDownload /></Button>
                     <Button style={{border: '1px solid #f22d2d'}} onClick={handleSendMail}>{mailer === 'none' ? "Open" : "Close"} Mail Deck</Button>
                 </ButtomDiv>
             </WordBox>

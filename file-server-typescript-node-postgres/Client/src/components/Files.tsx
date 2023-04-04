@@ -344,7 +344,7 @@ const Files: React.FC<Props> = props => {
                 {failure ? <FailureMessage>{failure}</FailureMessage> : ''}
                 <Form onSubmit={formik.handleSubmit} encType="multipart/form-data">
                     <Word>Have a Document to add to your Store Here?</Word>
-                    { /*user && user.id ?*/
+                    { user && user.id ?
                         <>
                             <Input onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.file_title} type='text' name='file_title' placeholder='Enter doc title' />
                             <Error>{formik.errors.file_title && formik.touched.file_title && formik.errors.file_title}</Error>
@@ -364,47 +364,17 @@ const Files: React.FC<Props> = props => {
                             {/* <Error>{formik.errors.document && formik.touched.document && formik.errors.document}</Error> */}
                             <Button type='submit'>Save</Button>
                         </>
-                        // : <NotLogWord>Create account or Log in to add files to your personal documents store</NotLogWord>
+                        : <NotLogWord>Create account or Log in to add files to your personal documents store</NotLogWord>
                     }
                 </Form>
             </SelectBox>
         </FilterBox>
 
         <All style={{justifyContent: "space-evenly"}}>
-            <File docFile={docFile} />
-            <File docFile={docFile} />
-            <File docFile={docFile} />
-            <File docFile={docFile} />
-            <File docFile={docFile} />
-            <File docFile={docFile} />
-            <File docFile={docFile} />
-            <File docFile={docFile} />
-            <File docFile={docFile} />
-            <File docFile={docFile} />
-            <File docFile={docFile} />
-            <File docFile={docFile} />
-            <File docFile={docFile} />
-            <File docFile={docFile} />
-            <File docFile={docFile} />
-            <File docFile={docFile} />
-            <File docFile={docFile} />
-            <File docFile={docFile} />
-            <File docFile={docFile} />
-            <File docFile={docFile} />
-            <File docFile={docFile} />
-            <File docFile={docFile} />
-            <File docFile={docFile} />
-            <File docFile={docFile} />
-            <File docFile={docFile} />
-            <File docFile={docFile} />
-            <File docFile={docFile} />
-            <File docFile={docFile} />
-            <File docFile={docFile} />
-            <File docFile={docFile} />
-            <File docFile={docFile} />
-            <File docFile={docFile} />
-            <File docFile={docFile} />
-
+            {
+                files.map((item, index) => <File key={index} docFile={item} />)
+            }
+                        
         </All>
     </Container>
   )
