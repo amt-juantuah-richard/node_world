@@ -3,7 +3,8 @@ import {
     getFiles, 
     getPrivateFilesForOneUser, 
     uploadFile,
-    uploadOnePublicFile
+    uploadOnePublicFile,
+    downloadFile
 } from "../controller";
 import { 
     checkAdminStatus, 
@@ -18,5 +19,6 @@ router.get("/", checkAdminStatus, getFiles);
 router.get("/:id/:email", checkUserStatus, getPrivateFilesForOneUser);
 router.post("/upload/:id", checkUserStatus, upLoadOneFile, uploadFile);
 router.post("/upload/admin/:id", checkAdminStatus, upLoadOneFile, uploadOnePublicFile);
+router.post("/download", downloadFile);
 
 export default router;

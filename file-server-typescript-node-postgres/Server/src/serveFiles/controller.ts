@@ -21,6 +21,7 @@ import {
 } from './queries';
 
 
+
 // Interacting with the Users table
 
 /**
@@ -435,10 +436,41 @@ export const getPrivateFilesForOneUser = (req: Request, res: Response, next: Nex
             if (error) {
                 setError(error, next, 400);
             }
-            else res.status(200).json(results.rows);
+            else {
+                res.status(200).json(results.rows);
+            }
         })
     } catch (error) {
         next(error);
     }
-
 }
+
+export const downloadFile = (req: Request, res: Response, next: NextFunction) => {
+    const { file_name } = req.body;
+    try {
+        res.download(`./public/uploads/${file_name}`, function (error) {
+            if (error) {
+                console.log(error);
+                next(error);
+            } else  {
+                pool.query("UPDATE files SET downloads=downloads+1 WHERE file_name=$1", [file_name], function (error, results) {
+                    if (error) {
+                        setError(error, next, 400);
+                    }
+                    else {
+                        console.log("file sent");
+                    }
+                });                
+            }
+        })
+    } catch (error) {
+        next(error);
+    }
+}
+
+//C:\Users\nanam\nodecodes\file-server-typescript-node-postgres\Server\public\uploads\icon_1680612559507.png
+
+
+
+
+
