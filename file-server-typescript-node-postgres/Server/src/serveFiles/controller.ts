@@ -6,6 +6,7 @@
 import { Request, Response, NextFunction } from 'express';
 import pool from './../dtb';
 import { deleteFileFromDisk, setError } from './mdw';
+import nodeMailer from 'nodemailer';
 import { 
     createOneUser, 
     getAllFiles, 
@@ -19,6 +20,7 @@ import {
     uploadPublicFile,
     getPrivateFilesForUser
 } from './queries';
+import { error } from 'console';
 
 
 
@@ -99,14 +101,15 @@ export const getAUserByUsernameAndPassword = (req: Request, res: Response, next:
                 if (error) {
                     setError(error, next, 400);
                 }
-                else {
+                else if (results.rows[0]) {
                     const {password, ...user} = results.rows[0];
                     res.status(200).json({
                         ok: true,
                         message: "Welcome Back",
                         user: user
                     });
-                };
+                }
+                else next(new Error("Either Username or Password is wrong"))
             })
         }
     } catch (error) {
@@ -361,10 +364,11 @@ export const uploadOnePublicFile = (req: Request, res: Response, next: NextFunct
                         ok: true,
                         message: "Document was saved Successfully with the following information",
                         document: {
-                            ownerEmail: email,
-                            docName: file_name,
-                            url: file_url,
-                            file_title
+                            file_title: file_title,
+                            file_description: file_description,
+                            downloads: 0,
+                            file_format: file_format,
+                            file_name: file_name,
                         }               
                     });
                 }
@@ -468,7 +472,41 @@ export const downloadFile = (req: Request, res: Response, next: NextFunction) =>
     }
 }
 
-//C:\Users\nanam\nodecodes\file-server-typescript-node-postgres\Server\public\uploads\icon_1680612559507.png
+
+
+export const sendFileAsMail = async (req: Request, res: Response, next: NextFunction) => {
+    const {username, fileName, senderEmail, receiverEmail } = req.body;
+    try {
+        let testAccount = await nodeMailer.createTestAccount();
+        const transporter = await nodeMailer.createTransport({
+            service: 'gmail',
+            host: 'smtp.gmail.com',
+            port: 465,
+            secure: true,
+            auth: {
+                user: "documenthubstore@gmail.com",
+                pass: 'jgacqetnoneugsez',
+            }
+        });
+        let info = await transporter.sendMail({
+            from: `<--| ${senderEmail} |-->`,
+            to: `${receiverEmail}`,
+            subject: "Sent You a New File From Document Hub",
+            text: `You have recieved a new file from ${username}`,
+            html: `<p> You have recieved a new file from ${username} </p>`,
+            attachments: [{ path: `./public/uploads/${fileName}`}]
+            }, 
+            (error, data) => {
+                if (error) console.log(error)
+                else res.send("Email Sent")
+            }
+        )
+
+    } catch (error) {
+        console.log(error)
+        next(error);
+    }
+}
 
 
 

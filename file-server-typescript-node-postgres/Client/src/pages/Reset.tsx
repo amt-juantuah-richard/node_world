@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import * as Yup from 'yup';
-import { useFormik } from 'formik';
-import styled from 'styled-components';
-import { ArrowBackIosNew, Password, PermPhoneMsg } from '@mui/icons-material';
 import axios from 'axios';
+import { useFormik } from 'formik';
+import React, { useState, useContext } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import {UserContext} from '../AuthContext';
+import styled from 'styled-components';
+import * as Yup from 'yup';
+import { ArrowBackIosNew } from '@mui/icons-material';
+
 
 const Container = styled.div`
   width: 100vw;
@@ -14,14 +16,6 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
   position: relative;
-`;
-const GoHome = styled.div` 
-    position: absolute;
-    top: 30px;
-    left: 20px;
-    &:hover {
-        opacity: 0.8;
-    }
 `;
 
 const Word = styled.span`
@@ -58,7 +52,6 @@ const Button = styled.button`
     border-radius: 5px;
     height: 35px;
     width: 100%;
-    border: none;
     outline: none;
     font-size: 14px;
     margin-top: 5px;
@@ -96,6 +89,14 @@ const Para = styled.p`
     }
 `;
 
+const GoHome = styled.div` 
+    position: absolute;
+    top: 30px;
+    left: 20px;
+    &:hover {
+        opacity: 0.8;
+    }
+`;
 
 const Error = styled.p`
     color: red;
@@ -132,52 +133,44 @@ const FailureMessage = styled.div`
 `;
 
 
-const Signup:React.FC = () => {
+
+const Reset:React.FC = () => {
+
     const navigate = useNavigate();
+    const { user, login } = useContext(UserContext);
     const [success, setSuccess] = useState('');
     const [failure, setFailure] = useState('');
 
     const formik = useFormik({
-        initialValues: {username: '', email: '', password: '', confpassword: ''},
+        initialValues: {username: '', password: ''},
         validationSchema: Yup.object({
             username: Yup.string()
                 .required('Username is required')
                 .min(6, 'Username is too short')
                 .max(30, 'Username too long'),
-            email: Yup.string()
-                .required('Email is required')
-                .min(6, 'Email is too short')
-                .email('Enter valid email')
-                .max(30, 'Email too long'),
             password: Yup.string()
                 .required('Password is required')
                 .min(6, 'Password is too short')
                 .max(30, 'Password too long'),
-            confpassword: Yup.string()
-                .required('Confirm password')
-                .oneOf([Yup.ref('password')], 'Your passwords do not match.')
-                
-        }),
+            }),
         onSubmit: async (values, action) => {
             const vals = {...values};
             action.resetForm();
-            setSuccess(`Creating your account...\n Please wait!`)
-            
+            setSuccess(`loading...\n Please wait!`);
             try {
-                const userData = await axios.post('http://localhost:5000/api/v1/users/register', vals);
-                
+                const userData = await axios.post('http://localhost:5000/api/v1/users/login', vals);
                 if (userData.data.ok) {
+                    login(userData.data.user);
                     setSuccess(userData.data.message);
                     setTimeout(() => {
-                        navigate("/login");
-                    }, 2000)
+                        navigate("/");
+                    }, 3000)
                 }
                 else if (!userData.data.ok) setFailure(userData.data.message)
             } catch (error: any) {
                 const msg: string = error.response.data.message;
                 setFailure(msg.includes("duplicate key") ? 'Username or email exists already. Create a new one, or log in' : msg);
             }
-            
         }
     })
   return (
@@ -186,26 +179,26 @@ const Signup:React.FC = () => {
             <Link to='/'><ArrowBackIosNew /></Link>
         </GoHome>
         
-      <SelectBox>
-        {!failure && success ? <SuccessMessage>{success}</SuccessMessage> : ''}
-        {failure ? <FailureMessage>{failure}</FailureMessage> : ''}
-              <Form onSubmit={formik.handleSubmit}>
-                  <Word>Register</Word>
-                  <Input onChange={formik.handleChange} onBlur={formik.handleBlur} type='text' name='username' value={formik.values.username} placeholder='Username' />
-                  <Error>{formik.errors.username && formik.touched.username && formik.errors.username}</Error>
-                  <Input onChange={formik.handleChange} onBlur={formik.handleBlur} type='email' name='email' value={formik.values.email} placeholder='Email' />
-                  <Error>{formik.errors.email && formik.touched.email && formik.errors.email}</Error>
-                  <Input onChange={formik.handleChange} onBlur={formik.handleBlur} type='password' name='password' value={formik.values.password} placeholder='Password' />
-                  <Error>{formik.errors.password && formik.touched.password && formik.errors.password}</Error>
-                  <Input onChange={formik.handleChange} onBlur={formik.handleBlur} type='password' name='confpassword' value={formik.values.confpassword} placeholder='Confrim Password' />
-                  <Error>{formik.errors.confpassword && formik.touched.confpassword && formik.errors.confpassword}</Error>
-                  <Button type='submit'>Login</Button>
-                  <Para>Already have an account? <Link to={'/login'}>Login</Link></Para>
-              </Form>
-          </SelectBox>
+        <SelectBox>
+            {!failure && success ? <SuccessMessage>{success}</SuccessMessage> : ''}
+            {failure ? <FailureMessage>{failure}</FailureMessage> : ''}
+                <Form onSubmit={formik.handleSubmit}>
+                    <Word>Reset Your Password</Word>
+                    <Input onChange={formik.handleChange} onBlur={formik.handleBlur} type='text' name='username' value={formik.values.username} placeholder='Username' />
+                    <Error>{formik.errors.username && formik.touched.username && formik.errors.username}</Error>
+                    <Input onChange={formik.handleChange} onBlur={formik.handleBlur} type='password' name='password' value={formik.values.password} placeholder='Password' />
+                    <Error>{formik.errors.password && formik.touched.password && formik.errors.password}</Error>
+                    <Button type='submit'>Login</Button>
+                    <Para>
+                        Don't have an account? <Link to={'/register'}>Register</Link> <br />
+                        Forgotten password? <Link to={'/resetpass'}>Reset Here</Link>
+                    </Para>
+                    
+                </Form>
+            </SelectBox>
         
     </Container>
   )
 }
 
-export default Signup
+export default Reset

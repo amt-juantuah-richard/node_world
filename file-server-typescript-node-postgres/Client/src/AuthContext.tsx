@@ -1,5 +1,5 @@
 import React, { PropsWithChildren, createContext, useEffect, useState } from 'react';
-
+import dummyUser from './dummyUser';
 
 // type setTer = Dispatch<SetStateAction<any>>;
 

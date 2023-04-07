@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
 import fileDownload from 'js-file-download';
+
 import { 
     GrDocumentPdf, 
     GrDocumentPpt, 
@@ -15,6 +16,8 @@ import {
     GrDownload
 } from 'react-icons/gr';
 import { Send } from '@mui/icons-material';
+import { UserContext } from '../AuthContext';
+import { IconType } from 'react-icons';
 
 
 const Container = styled.div`
@@ -37,6 +40,7 @@ const Flag = styled.div`
     width: 255px;
     height: 60px;
     display: flex;
+    flex-flow: column;
     align-items: center;
     justify-content: center;
     border-radius: 5px 5px 0 0;
@@ -52,7 +56,7 @@ const About = styled.div`
 
 const MailBox = styled.form`
     display: flex;
-    transition: all 400ms;
+    transition: all 500ms;
     flex-flow: row;
     justify-content: space-between;
     height: 30px;
@@ -62,6 +66,23 @@ const MailBox = styled.form`
     bottom: -35px;
     z-index: 2;
     border: 1px solid #04a7c4;
+    border-radius: 5px;
+`;
+
+const NotifBox = styled.div`
+    display: flex;
+    transition: all 400ms;
+    flex-flow: row;
+    justify-content: center;
+    align-items: center;
+    height: 30px;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    bottom: -35px;
+    z-index: 2;
+    border: 1px solid #04a7c4;
+    background-color: #17c404;
     border-radius: 5px;
 `;
 
@@ -102,6 +123,12 @@ const Words = styled.p`
     height: 30px;
     overflow: hidden;
 `;
+
+const Fname = styled(Words)`
+    font-style: italic;
+    font-weight: 12px;
+    font-family: monospace;
+`
 
 const ButtomDiv = styled.div`
     width: 100%;
@@ -156,43 +183,32 @@ type Props = {
 const File:React.FC<Props> = props => {
     const { docFile } = props;
     const [mailer, setMailer] = useState('none');
+    const [mailerNotification, setmailerNotification] = useState('none');
+    const [reciever, setReciever] = useState('');
     const [downs, setDowns] = useState(parseInt(docFile.downloads));
+    const [format, setFormat] = useState(<GrDocument />)
+    const {user} = useContext(UserContext);
 
-    const handleSendMail = () => {
+    const handleMailDeckOpener = () => {
         setMailer(mailer === 'none' ? 'flex' : 'none');
     }
 
     
-
-    let format;
-    const formatString = docFile.file_format.split("/")[1]
-     if (formatString) {
-        if (formatString === 'pdf') {
-            format = <GrDocumentPdf />;
-        }            
-        else if (['doc', 'docx', 'ods', 'odt'].includes(formatString)) {
-            format = <GrDocumentWord />;
-        }            
-        else if (['xls', 'xlsx'].includes(formatString)) {
-            format = <GrDocumentExcel />;
-        }            
-        else if (formatString ==='ppt' || 'pptx') {
-            format = <GrDocumentPpt />;
-        }            
-        else if (formatString === 'txt') {
-            format = <GrDocumentTxt />;
-        }            
-        else if (formatString === 'text') {
-            format = <GrDocumentText />;
-        }            
-        else if (['jpeg', 'jpg', 'png', 'gif'].includes(formatString)) {
-            format = <GrDocumentImage />;
-        }            
-        else {
-            format = <GrDocument />;
-        }
-    }
-
+    useEffect(() => {
+        const formatString = docFile.file_format.split("/")[1];
+        setFormat( 
+            formatString === 'pdf' ? <GrDocumentPdf />
+         : ['doc', 'docx', 'ods', 'odt'].includes(formatString) ? <GrDocumentWord />
+         : ['xls', 'xlsx'].includes(formatString) ? <GrDocumentExcel />
+         : ['ppt', 'pptx'].includes(formatString) ? <GrDocumentPpt />
+         : ['txt', 'plain'].includes(formatString) ? <GrDocumentTxt />
+         : ['twxt'].includes(formatString) ? <GrDocumentText />
+         : ['jpeg', 'jpg', 'png', 'gif'].includes(formatString) ? <GrDocumentImage />
+         : <GrDocument />
+        )
+    }, [])
+    
+    
     const handleDownload = async () => {
         try {
             const {data} = await axios.post(`http://localhost:5000/api/v1/files/download`, { file_name: docFile.file_name}, 
@@ -210,31 +226,59 @@ const File:React.FC<Props> = props => {
         }
     }
 
+    const handleMailer = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        e.preventDefault();
+        const recieverValue = reciever;
+        setReciever("");
+        try {
+            const { data } = await axios.post("http://localhost:5000/api/v1/files/mailer", {
+                username: user?.username,
+                fileName: docFile.file_name,
+                senderEmail: user?.email,
+                receiverEmail: recieverValue,
+            }); 
+            
+            if (data) {
+                setMailer('none');
+                setmailerNotification('flex');
+                setTimeout(() => {
+                    setmailerNotification('none');
+                }, 10000)
+            }
+            else alert("An Error Occurred Try sending again!!")
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
 
   return (
     
     <Container>
         <Flag>
             {format}
+            <Fname>{ docFile.file_name}</Fname>
             <Downs>
                 <p>{ downs } downloads</p>
             </Downs>
         </Flag>
         <About>
+        
             <WordBox>
                 <Words><b>Title: </b> { docFile.file_title}</Words>
                 <Words><b>Desc: </b> { docFile.file_description }</Words>
                 <ButtomDiv>                
                     <Button onClick={handleDownload} style={{border: '1px solid #edf420'}} >Download <GrDownload /></Button>
-                    <Button style={{border: '1px solid #f22d2d'}} onClick={handleSendMail}>{mailer === 'none' ? "Open" : "Close"} Mail Deck</Button>
+                    <Button style={{border: '1px solid #f22d2d'}} onClick={handleMailDeckOpener}>{mailer === 'none' ? "Open" : "Close"} Mail Deck</Button>
                 </ButtomDiv>
             </WordBox>
             <MailBox style={{display: `${mailer}`}}>
-                <Email type='email' placeholder="Send to which Email Address?"/>
-                <MailSend>
+                <Email  type='email' name='email' value={reciever} onChange={(e) => setReciever(e.target.value)} placeholder="Send to which Email Address?"/>
+                <MailSend type='submit' disabled={ reciever.length ? false : true} onClick={handleMailer}>
                     <Send />
                 </MailSend>
             </MailBox>
+            <NotifBox style={{display: `${mailerNotification}`}}>Success: Email Sent</NotifBox>
         </About>
     </Container>
   )

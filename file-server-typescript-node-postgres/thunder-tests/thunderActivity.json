@@ -70,5 +70,24 @@
       ]
     },
     "tests": []
+  },
+  {
+    "_id": "f1b1b75a-b070-4a3a-8cb1-8d68c9af8dd3",
+    "colId": "history",
+    "containerId": "",
+    "name": "http://localhost:5000/api/v1/files/mailer",
+    "url": "http://localhost:5000/api/v1/files/mailer",
+    "method": "POST",
+    "sortNum": 0,
+    "created": "2023-04-05T02:46:42.116Z",
+    "modified": "2023-04-05T03:50:53.977Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"username\": \"admin\",\n  \"fileName\": \"icon_1680612559507.png\",\n  \"senderEmail\": \"documenthubstore@gmail.com\",\n  \"receiverEmail\": \"nanamcroj@gmail.com\"\n}",
+      "form": []
+    },
+    "tests": []
   }
 ]
