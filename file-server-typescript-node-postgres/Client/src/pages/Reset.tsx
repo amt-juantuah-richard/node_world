@@ -188,12 +188,7 @@ const Reset:React.FC = () => {
                     <Error>{formik.errors.username && formik.touched.username && formik.errors.username}</Error>
                     <Input onChange={formik.handleChange} onBlur={formik.handleBlur} type='password' name='password' value={formik.values.password} placeholder='Password' />
                     <Error>{formik.errors.password && formik.touched.password && formik.errors.password}</Error>
-                    <Button type='submit'>Login</Button>
-                    <Para>
-                        Don't have an account? <Link to={'/register'}>Register</Link> <br />
-                        Forgotten password? <Link to={'/resetpass'}>Reset Here</Link>
-                    </Para>
-                    
+                    <Button type='submit'>Reset</Button>                    
                 </Form>
             </SelectBox>
         
