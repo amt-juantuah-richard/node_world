@@ -142,13 +142,18 @@ const Reset:React.FC = () => {
     const [failure, setFailure] = useState('');
 
     const formik = useFormik({
-        initialValues: {username: '', password: ''},
+        initialValues: {username: '', email: '', newPassword: ''},
         validationSchema: Yup.object({
             username: Yup.string()
                 .required('Username is required')
                 .min(6, 'Username is too short')
                 .max(30, 'Username too long'),
-            password: Yup.string()
+            email: Yup.string()
+                .required('Email is required')
+                .min(6, 'Email is too short')
+                .email('Enter valid email')
+                .max(30, 'Email too long'),
+            newPassword: Yup.string()
                 .required('Password is required')
                 .min(6, 'Password is too short')
                 .max(30, 'Password too long'),
@@ -158,18 +163,17 @@ const Reset:React.FC = () => {
             action.resetForm();
             setSuccess(`loading...\n Please wait!`);
             try {
-                const userData = await axios.post('http://localhost:5000/api/v1/users/login', vals);
+                const userData = await axios.put('http://localhost:5000/api/v1/users/password', vals);
                 if (userData.data.ok) {
-                    login(userData.data.user);
-                    setSuccess(userData.data.message);
+                    setSuccess(userData.data.message + ". You can log in with your new credentials");
                     setTimeout(() => {
-                        navigate("/");
+                        navigate("/login");
                     }, 3000)
                 }
                 else if (!userData.data.ok) setFailure(userData.data.message)
             } catch (error: any) {
                 const msg: string = error.response.data.message;
-                setFailure(msg.includes("duplicate key") ? 'Username or email exists already. Create a new one, or log in' : msg);
+                setFailure(msg);
             }
         }
     })
@@ -184,10 +188,16 @@ const Reset:React.FC = () => {
             {failure ? <FailureMessage>{failure}</FailureMessage> : ''}
                 <Form onSubmit={formik.handleSubmit}>
                     <Word>Reset Your Password</Word>
-                    <Input onChange={formik.handleChange} onBlur={formik.handleBlur} type='text' name='username' value={formik.values.username} placeholder='Username' />
+
+                    <Input onChange={formik.handleChange} onBlur={formik.handleBlur} type='text' name='username' value={formik.values.username} placeholder='Enter Username' />
                     <Error>{formik.errors.username && formik.touched.username && formik.errors.username}</Error>
-                    <Input onChange={formik.handleChange} onBlur={formik.handleBlur} type='password' name='password' value={formik.values.password} placeholder='Password' />
-                    <Error>{formik.errors.password && formik.touched.password && formik.errors.password}</Error>
+
+                    <Input onChange={formik.handleChange} onBlur={formik.handleBlur} type='email' name='email' value={formik.values.email} placeholder='Enter Email' />
+                    <Error>{formik.errors.email && formik.touched.email && formik.errors.email}</Error>
+
+                    <Input onChange={formik.handleChange} onBlur={formik.handleBlur} type='password' name='newPassword' value={formik.values.newPassword} placeholder='Enter new Password' />
+                    <Error>{formik.errors.newPassword && formik.touched.newPassword && formik.errors.newPassword}</Error>
+
                     <Button type='submit'>Reset</Button>                    
                 </Form>
             </SelectBox>
@@ -196,4 +206,4 @@ const Reset:React.FC = () => {
   )
 }
 
-export default Reset
+export default Reset;

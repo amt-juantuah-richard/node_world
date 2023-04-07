@@ -191,7 +191,7 @@ const Login:React.FC = () => {
                     <Button type='submit'>Login</Button>
                     <Para>
                         Don't have an account? <Link to={'/register'}>Register</Link> <br />
-                        Forgotten password? <Link to={'/resetpass'}>Reset Here</Link>
+                        Forgotten password? <Link to={'/reset'}>Reset Here</Link>
                     </Para>
                     
                 </Form>

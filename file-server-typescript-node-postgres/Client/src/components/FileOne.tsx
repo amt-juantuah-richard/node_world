@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
 import fileDownload from 'js-file-download';
@@ -17,7 +16,6 @@ import {
 } from 'react-icons/gr';
 import { Send } from '@mui/icons-material';
 import { UserContext } from '../AuthContext';
-import { IconType } from 'react-icons';
 
 
 const Container = styled.div`
@@ -194,6 +192,7 @@ const File:React.FC<Props> = props => {
     }
 
     
+    
     useEffect(() => {
         const formatString = docFile.file_format.split("/")[1];
         setFormat( 
@@ -246,8 +245,11 @@ const File:React.FC<Props> = props => {
                 }, 10000)
             }
             else alert("An Error Occurred Try sending again!!")
-        } catch (error) {
+        } catch (error: any) {
             console.log(error)
+            if (error.response.data.stack.includes('dns')) {
+                alert('Check your internet connection. If issue persists, server might be down')
+            }
         }
     }
 
@@ -263,7 +265,6 @@ const File:React.FC<Props> = props => {
             </Downs>
         </Flag>
         <About>
-        
             <WordBox>
                 <Words><b>Title: </b> { docFile.file_title}</Words>
                 <Words><b>Desc: </b> { docFile.file_description }</Words>

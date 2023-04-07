@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import styled from 'styled-components';
-import { ArrowBackIosNew, Password, PermPhoneMsg } from '@mui/icons-material';
+import { ArrowBackIosNew } from '@mui/icons-material';
 import axios from 'axios';
 
 const Container = styled.div`
