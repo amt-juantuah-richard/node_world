@@ -85,10 +85,16 @@ const AuthDiv = styled.div`
     flex-flow: row;
     align-items: center;
     justify-content: space-around;
-    height: 60px;
-    width: 180px;
+    height: auto;
+    width: auto;
     border: 1px solid #04a7c4;
     border-radius: 5px;
+    padding: 4px;
+    @media screen and (max-width: 480px) {
+      border-radius: 2px;
+      padding: 2px;
+      gap: 2px;
+    }
 `;
 
 const Button = styled.button`
@@ -102,6 +108,12 @@ const Button = styled.button`
     &:hover {
         background-color: red;
         color: #fbcece;
+    };
+    @media screen and (max-width: 480px) {
+      width: 45px;
+      height: 25px;
+      border-radius: 2px;
+      font-size: 11px;
     }
 `;
 
@@ -123,7 +135,7 @@ const Navbar:React.FC = () => {
                 <Title style={{color: "red"}}>Documents Hub Administrator</Title>
                 : <Title>Documents Hub</Title>
               }
-            <Title><FcDocument /><FcFilingCabinet/><UserSpan>{user && user.id ? user.username : 'Not Logged In'}</UserSpan></Title>
+            <Title><FcDocument /><FcFilingCabinet/></Title>
           </Div>
         </Link>
 

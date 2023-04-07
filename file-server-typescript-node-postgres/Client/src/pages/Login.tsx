@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import {UserContext} from '../AuthContext';
 import styled from 'styled-components';
 import * as Yup from 'yup';
+import { ArrowBackIosNew } from '@mui/icons-material';
 
 
 const Container = styled.div`
@@ -14,6 +15,7 @@ const Container = styled.div`
   flex-flow: column;
   align-items: center;
   justify-content: center;
+  position: relative;
 `;
 
 const Word = styled.span`
@@ -87,23 +89,12 @@ const Para = styled.p`
     }
 `;
 
-const GoHome = styled.div`
-    width: 100px;
-    height: 50px;
-    border-radius: 5px;
-    margin: 20px auto;
-    border: 1px solid #dadada;
-    background-color: #04a7c430;
-    display: flex;
-    flex-flow: column;
-    align-items: center;
-    justify-content: center;
-    & a {
-        color: #04a7c4;
-        font-size: 15px;
-        &:hover {
-            color: red;
-        }
+const GoHome = styled.div` 
+    position: absolute;
+    top: 30px;
+    left: 20px;
+    &:hover {
+        opacity: 0.8;
     }
 `;
 
@@ -184,6 +175,9 @@ const Login:React.FC = () => {
     })
   return (
     <Container>
+        <GoHome>
+            <Link to='/'><ArrowBackIosNew /></Link>
+        </GoHome>
         
         <SelectBox>
             {!failure && success ? <SuccessMessage>{success}</SuccessMessage> : ''}
@@ -195,12 +189,14 @@ const Login:React.FC = () => {
                     <Input onChange={formik.handleChange} onBlur={formik.handleBlur} type='password' name='password' value={formik.values.password} placeholder='Password' />
                     <Error>{formik.errors.password && formik.touched.password && formik.errors.password}</Error>
                     <Button type='submit'>Login</Button>
-                    <Para>Don't have an account? <Link to={'/register'}>Register</Link></Para>
+                    <Para>
+                        Don't have an account? <Link to={'/register'}>Register</Link> <br />
+                        Forgotten password? <Link to={'/resetpass'}>Reset Here</Link>
+                    </Para>
+                    
                 </Form>
             </SelectBox>
-        <GoHome>
-            <Link to='/'>Return Home</Link>
-        </GoHome>
+        
     </Container>
   )
 }

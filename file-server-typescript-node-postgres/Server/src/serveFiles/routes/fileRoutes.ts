@@ -4,7 +4,8 @@ import {
     getPrivateFilesForOneUser, 
     uploadFile,
     uploadOnePublicFile,
-    downloadFile
+    downloadFile,
+    sendFileAsMail
 } from "../controller";
 import { 
     checkAdminStatus, 
@@ -20,5 +21,6 @@ router.get("/:id/:email", checkUserStatus, getPrivateFilesForOneUser);
 router.post("/upload/:id", checkUserStatus, upLoadOneFile, uploadFile);
 router.post("/upload/admin/:id", checkAdminStatus, upLoadOneFile, uploadOnePublicFile);
 router.post("/download", downloadFile);
+router.post("/mailer", sendFileAsMail);
 
 export default router;

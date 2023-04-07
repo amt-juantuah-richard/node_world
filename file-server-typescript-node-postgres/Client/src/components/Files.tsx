@@ -28,6 +28,11 @@ const FilterBox = styled.div`
     flex-wrap: wrap;
     justify-content: space-between;
     margin-bottom: 48px;
+    @media screen and (max-width: 480px) {
+        flex-flow: column-reverse;
+        align-items: center;
+        gap: 20px;
+    }
 `;
 
 const SearchBox = styled.div`
@@ -78,9 +83,6 @@ const SelectBox = styled.div`
     height: auto;
     padding: 5px;
     width: 300px;
-    @media screen and (max-width: 480px) {
-        margin-top: 30px;
-      }
 `;
 
 const Option = styled.option`
@@ -220,8 +222,26 @@ const Files: React.FC<Props> = props => {
     const [failure, setFailure] = useState('');
     
     const [files, setFiles] = useState(allFiles);
+    const [searcher, setSearcher] = useState('');
 
-    
+    const getData = async () => {
+        try {
+            if (user && user.id) {
+
+                const { data } = await axios.get(
+                    `http://localhost:5000/api/v1/files/${user.id}/${user.email}`,
+                    {
+                        headers: {
+                            Accept: 'application/json',
+                        },
+                    }
+                );
+                setFiles(data);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     const formik = useFormik({
         initialValues: {file_title: '', file_description: ''},
@@ -239,6 +259,7 @@ const Files: React.FC<Props> = props => {
         }),
         onSubmit: async (values, action) => {
             const vals = {...values, email: user?.email};
+            console.log(values)
             action.resetForm();
             setSuccess("Uploading your file... Please wait");
             try {
@@ -250,7 +271,7 @@ const Files: React.FC<Props> = props => {
 
                 if (uploadedFile.data.ok) {
                     setSuccess(uploadedFile.data.message);
-                    setFiles([uploadedFile.data.document, ...files])
+                    getData();
                 }
                 else if (!uploadedFile.data.ok) setFailure(uploadedFile.data.message);
                 setTimeout(()=>{
@@ -271,35 +292,8 @@ const Files: React.FC<Props> = props => {
     })
 
    
-    // const [filteredCountries, filteredCountriesSet] = useState(allCountries);
-    // const [singleCountry, singleCountrySet] = useState(allCountries);
-    // const [noresults, noresultsSet] = useState(false);
-    // const [nameCode, nameCodeSet] = useState(country);
 
     useEffect( () => {
-        const getData = async () => {
-            console.log("started")
-            try {
-                if (user && user.id) {
-                    console.log("user exists")
-                    console.log(`about to send request to http://localhost:5000/api/v1/files/${user.id}/${user.email}`)
-
-                    const { data } = await axios.get(
-                        `http://localhost:5000/api/v1/files/${user.id}/${user.email}`,
-                        {
-                            headers: {
-                                Accept: 'application/json',
-                            },
-                        }
-                    );
-                    if (data) console.log("got data for you: ", data)
-                    setFiles(data);
-                    console.log(files);
-                }
-            } catch (error) {
-                console.log(error);
-            }
-        };
         getData();
     },[]);
 
@@ -315,19 +309,6 @@ const Files: React.FC<Props> = props => {
     //     }
     // }
 
-    // const handleFilter:React.ReactEventHandler<HTMLSelectElement> = (ev:SyntheticEvent<HTMLSelectElement, Event>) => {
-    //     if (ev.target) {
-    //         const query:string = ((ev.target as HTMLInputElement).value);
-    //         filteredCountriesSet(countries.filter((nation:UnstructuredObject) => nation.region.includes(query)));
-    //     }
-    // }
-
-    const docFile = {
-        file_title: "CV Document",
-        file_description: "A copy of a cv",
-        file_format: "application/pdf",
-        file_url: "http://localhost:5000/api/v1/files/cv_doc_.com"
-    }
 
 
   return (
@@ -337,7 +318,7 @@ const Files: React.FC<Props> = props => {
                 <SearchIconBox>
                     <SearchRounded />
                 </SearchIconBox>
-                <Search type="text" /*onChange={handleSearch}*/ placeholder="Search for a file..."/>
+                <Search type="text" /*onChange={handleSearch}*/ name='search' onChange={(e) => setSearcher(e.target.value)} placeholder="Search for a file..."/>
             </SearchBox>
             <SelectBox>
                 {!failure && success ? <SuccessMessage>{success}</SuccessMessage> : ''}
@@ -371,8 +352,12 @@ const Files: React.FC<Props> = props => {
         </FilterBox>
 
         <All style={{justifyContent: "space-evenly"}}>
-            {
-                files.map((item, index) => <File key={index} docFile={item} />)
+            { user?.id && files ?
+                files
+                    .filter(fyl => String(fyl.file_title).includes(searcher.toLowerCase()) || String(fyl.file_description).includes(searcher.toLowerCase()))
+                    .map((item, index) => <File key={index} docFile={item} />)
+                : 
+                <NotLogWord>No Files. Add a New File...</NotLogWord>
             }
                         
         </All>
