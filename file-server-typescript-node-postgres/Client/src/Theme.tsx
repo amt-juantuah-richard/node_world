@@ -8,14 +8,14 @@ type ThemeContextProps = {
     [key:string]: any;
 }
 export const ThemeContext = createContext<ThemeContextProps>({
-    theme: "light",
+    theme: "dark",
     themeSet: (_theme: ThemeMode) => {},
     themeToggler: () => {}
 });
 
 const ThemeProvider:React.FC<PropsWithChildren> = ({children}:any) => {
     
-    const [theme, themeSet] = useState<ThemeMode>("");
+    const [theme, themeSet] = useState<ThemeMode>("dark");
 
     useEffect(() => {
         const getPresentTheme = () => {
