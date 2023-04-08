@@ -158,7 +158,7 @@ const Reset:React.FC = () => {
             action.resetForm();
             setSuccess(`loading...\n Please wait!`);
             try {
-                const userData = await axios.post('http://localhost:5000/api/v1/users/login', vals);
+                const userData = await axios.post('http://13.50.13.83:5000/api/v1/users/login', vals);
                 if (userData.data.ok) {
                     login(userData.data.user);
                     setSuccess(userData.data.message);

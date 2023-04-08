@@ -164,7 +164,7 @@ const Signup:React.FC = () => {
             setSuccess(`Creating your account...\n Please wait!`)
             
             try {
-                const userData = await axios.post('http://localhost:5000/api/v1/users/register', vals);
+                const userData = await axios.post('http://13.50.13.83:5000/api/v1/users/register', vals);
                 
                 if (userData.data.ok) {
                     setSuccess(userData.data.message);

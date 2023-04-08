@@ -229,7 +229,7 @@ const Files: React.FC<Props> = props => {
             if (user && user.id) {
 
                 const { data } = await axios.get(
-                    `http://localhost:5000/api/v1/files/${user.id}/${user.email}`,
+                    `http://13.50.13.83:5000/api/v1/files/${user.id}/${user.email}`,
                     {
                         headers: {
                             Accept: 'application/json',
@@ -263,7 +263,7 @@ const Files: React.FC<Props> = props => {
             action.resetForm();
             setSuccess("Uploading your file... Please wait");
             try {
-                const uploadedFile = await axios.post(`http://localhost:5000/api/v1/files/upload/${user?.id}`, vals, {
+                const uploadedFile = await axios.post(`http://13.50.13.83:5000/api/v1/files/upload/${user?.id}`, vals, {
                     headers: {
                         "Content-Type": "multipart/form-data",
                       },
