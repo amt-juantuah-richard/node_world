@@ -24,7 +24,7 @@ const Container = styled.div`
       display: content;
       text-decoration: none;
     }
-    @media screen and (max-width: 480px) {
+    @media screen and (max-width: 680px) {
       padding-left: 28px;
       padding-right: 28px;
     }
@@ -35,14 +35,14 @@ const Div = styled.div`
 `;
 
 const Title = styled.h2`
-  @media screen and (max-width: 480px) {
+  @media screen and (max-width: 680px) {
     font-size: 14px;
     line-height: 12px;
   }
 `;
 
 const Span = styled.span`
-  @media screen and (max-width: 480px) {
+  @media screen and (max-width: 680px) {
       font-size: 12px;
     }
 `;
@@ -58,7 +58,7 @@ const Mode = styled.p`
   opacity: 0.6;
   & svg {
     fill: var(--color-text);
-    @media screen and (max-width: 480px) {
+    @media screen and (max-width: 680px) {
       font-size: 11px;
       line-hight: 16px;
     }
@@ -66,7 +66,7 @@ const Mode = styled.p`
   & ${Span} {
     color: var(--color-text);
     font-weight: 600;
-    @media screen and (max-width: 480px) {
+    @media screen and (max-width: 680px) {
       font-size: 12px;
       line-hight: 16px;
     }
@@ -74,7 +74,7 @@ const Mode = styled.p`
   &:hover {
     opacity: 1;
   }
-  @media screen and (max-width: 480px) {
+  @media screen and (max-width: 680px) {
     width: 85px;
   }
 `;
@@ -90,7 +90,8 @@ const AuthDiv = styled.div`
     border: 1px solid #04a7c4;
     border-radius: 5px;
     padding: 4px;
-    @media screen and (max-width: 480px) {
+    gap: 4px;
+    @media screen and (max-width: 680px) {
       border-radius: 2px;
       padding: 2px;
       gap: 2px;
@@ -109,7 +110,7 @@ const Button = styled.button`
         background-color: red;
         color: #fbcece;
     };
-    @media screen and (max-width: 480px) {
+    @media screen and (max-width: 680px) {
       width: 45px;
       height: 25px;
       border-radius: 2px;
@@ -157,4 +158,4 @@ const Navbar:React.FC = () => {
   )
 }
 
-export default Navbar
+export default Navbar;

@@ -12,6 +12,7 @@ import {
     getAllFiles, 
     getAllUsers,
     getOneUserByUsernameAndPassword,
+    getOneUserByUsernameAndEmail,
     deleteOneUser, 
     updateOneUserUsername,
     updateOneUserPassword,
@@ -20,7 +21,6 @@ import {
     uploadPublicFile,
     getPrivateFilesForUser
 } from './queries';
-import { error } from 'console';
 
 
 
@@ -261,22 +261,22 @@ export const updateAUserUsername = (req: Request, res: Response, next: NextFunct
  */
 export const updateAUserPassword = (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { username, password, newPassword } = req.body;
+        const { username, email, newPassword } = req.body;
 
-        if (!username || !password || !newPassword) {
-            const errorMessage = 'username, old password, and new password are required fields for username updates';
+        if (!username || !email || !newPassword) {
+            const errorMessage = 'username, email, and new password are required fields for username updates';
             setError(errorMessage, next, 400);
         }
         else {
-            pool.query(getOneUserByUsernameAndPassword, [username, password], (error, results) => {
+            pool.query(getOneUserByUsernameAndEmail, [username, email], (error, results) => {
                 if (error) {
                     setError(error, next, 400);
                 } else if (!results.rows.length) {
-                    const errorMessage = 'Update unsuccessful. Record not found';
+                    const errorMessage = 'Update unsuccessful. Username or password might be wrong. Check again';
                     setError(errorMessage, next, 404);
                 }
                 else {
-                    pool.query(updateOneUserPassword, [newPassword, password, username], (error, results) => {
+                    pool.query(updateOneUserPassword, [newPassword, username, email], (error, results) => {
                         if (error) {
                             setError(error, next, 400);
                         }
@@ -503,7 +503,6 @@ export const sendFileAsMail = async (req: Request, res: Response, next: NextFunc
         )
 
     } catch (error) {
-        console.log(error)
         next(error);
     }
 }

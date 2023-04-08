@@ -1,9 +1,8 @@
 import { SearchRounded } from '@mui/icons-material';
-import React, { SyntheticEvent, useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import File from './FileOne';
 import axios from 'axios';
-import FormInput from './FormInput';
 import { UserContext } from '../AuthContext';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -16,7 +15,7 @@ const Container = styled.div`
     display: flex;
     flex-flow: column;
     transition: all 700ms;
-    @media screen and (max-width: 480px) {
+    @media screen and (max-width: 680px) {
         padding-left: 28px;
         padding-right: 28px;
       }
@@ -28,7 +27,7 @@ const FilterBox = styled.div`
     flex-wrap: wrap;
     justify-content: space-between;
     margin-bottom: 48px;
-    @media screen and (max-width: 480px) {
+    @media screen and (max-width: 680px) {
         flex-flow: column-reverse;
         align-items: center;
         gap: 20px;
@@ -45,7 +44,7 @@ const SearchBox = styled.div`
     &:hover {
         box-shadow: 0px 2px 9px rgba(0, 0, 0, 0.334);
     }
-    @media screen and (max-width: 480px) {
+    @media screen and (max-width: 680px) {
         height: 48px;
         width: 343px;
     }
@@ -89,7 +88,7 @@ const Option = styled.option`
     line-height: 20px;
     margin-top: 10px;
     margin-bottom: 10px;
-    @media screen and (max-width: 480px) {
+    @media screen and (max-width: 680px) {
         font-size: 12px;
         margin-top: 10px;
       }
@@ -103,7 +102,7 @@ const All = styled.div`
     justify-content: space-between;
     row-gap: 75px;
     column-gap: 48px;
-    @media screen and (max-width: 480px) {
+    @media screen and (max-width: 680px) {
         padding-left: 27px;
         padding-right: 27px;
         justify-content: center;
@@ -297,18 +296,13 @@ const Files: React.FC<Props> = props => {
         getData();
     },[]);
 
-   
-
-    // const handleSearch:React.ReactEventHandler<HTMLInputElement> = (ev:SyntheticEvent<HTMLInputElement, Event>) => {
-    //     if (ev.target) {
-    //         const query:string = ((ev.target as HTMLInputElement).value).toUpperCase();
-    //         singleCountrySet(filteredCountries.filter((nation:UnstructuredObject) => (nation.name.common).toUpperCase().includes(query)));
-    //         if (query) {
-    //             noresultsSet(true)
-    //         } else noresultsSet(false)
-    //     }
-    // }
-
+    const docFile = {
+        file_format: 'application/pdf',
+        file_name: 'not_a_real_file.pdf',
+        downloads: 3445,
+        file_title: 'Example File',
+        file_description: 'This is a test file'
+    }
 
 
   return (
@@ -357,7 +351,10 @@ const Files: React.FC<Props> = props => {
                     .filter(fyl => String(fyl.file_title).includes(searcher.toLowerCase()) || String(fyl.file_description).includes(searcher.toLowerCase()))
                     .map((item, index) => <File key={index} docFile={item} />)
                 : 
-                <NotLogWord>No Files. Add a New File...</NotLogWord>
+                <>
+                    <NotLogWord>No Files. Add a New File. Files will look like the component below</NotLogWord>
+                    <File docFile={docFile} />
+                </>
             }
                         
         </All>
