@@ -103,7 +103,7 @@ const Error = styled.p`
 `;
 
 const SuccessMessage = styled.div`
-    height: auto
+    height: auto;
     width: 250px;
     margin: 10px auto;
     padding: 10px;
@@ -118,7 +118,7 @@ const SuccessMessage = styled.div`
 `;
 
 const FailureMessage = styled.div`
-    height: auto
+    height: auto;
     width: 250px;
     margin: 10px auto;
     padding: 10px;

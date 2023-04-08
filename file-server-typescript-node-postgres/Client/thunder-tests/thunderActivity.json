@@ -36,5 +36,24 @@
       "form": []
     },
     "tests": []
+  },
+  {
+    "_id": "56fa7418-eb39-4b00-90f2-ea9564ccb6b5",
+    "colId": "history",
+    "containerId": "",
+    "name": "http://13.50.13.83:5000/api/v1/users/register",
+    "url": "http://13.50.13.83:5000/api/v1/users/register",
+    "method": "POST",
+    "sortNum": 0,
+    "created": "2023-04-08T08:34:08.808Z",
+    "modified": "2023-04-08T08:34:08.808Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\r\n    \"username\": \"example\",\r\n    \"email\": \"expample@example.com\",\r\n    \"password\": \"example\",\r\n    \"confpassword\": \"example\"\r\n}",
+      "form": []
+    },
+    "tests": []
   }
 ]
