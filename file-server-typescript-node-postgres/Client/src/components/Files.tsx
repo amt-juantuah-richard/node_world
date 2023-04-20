@@ -6,6 +6,7 @@ import axios from 'axios';
 import { UserContext } from '../AuthContext';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { baseUniformRL } from '../variables';
 
 const Container = styled.div`
     width: 100vw;
@@ -172,7 +173,7 @@ const Error = styled.p`
 `;
 
 const SuccessMessage = styled.div`
-    height: auto
+    height: auto;
     width: 250px;
     margin: 10px auto;
     padding: 10px;
@@ -187,7 +188,7 @@ const SuccessMessage = styled.div`
 `;
 
 const FailureMessage = styled.div`
-    height: auto
+    height: auto;
     width: 250px;
     margin: 10px auto;
     padding: 10px;
@@ -228,7 +229,7 @@ const Files: React.FC<Props> = props => {
             if (user && user.id) {
 
                 const { data } = await axios.get(
-                    `http://13.50.13.83:5000/api/v1/files/${user.id}/${user.email}`,
+                    `${baseUniformRL}/api/v1/files/${user.id}/${user.email}`,
                     {
                         headers: {
                             Accept: 'application/json',
@@ -262,7 +263,7 @@ const Files: React.FC<Props> = props => {
             action.resetForm();
             setSuccess("Uploading your file... Please wait");
             try {
-                const uploadedFile = await axios.post(`http://13.50.13.83:5000/api/v1/files/upload/${user?.id}`, vals, {
+                const uploadedFile = await axios.post(`${baseUniformRL}/api/v1/files/upload/${user?.id}`, vals, {
                     headers: {
                         "Content-Type": "multipart/form-data",
                       },

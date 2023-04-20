@@ -1,0 +1,1 @@
+export const baseUniformRL = 'http://localhost:5000';

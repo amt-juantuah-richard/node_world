@@ -57,5 +57,5 @@ app.use(errorHandler);
 
 
 app.listen(port, () => {
-    console.log(`Application is running on http://localhost:${port}`);
+    console.log(`Application is running on port ${port}`);
 })

@@ -6,6 +6,7 @@ import {UserContext} from '../AuthContext';
 import styled from 'styled-components';
 import * as Yup from 'yup';
 import { ArrowBackIosNew } from '@mui/icons-material';
+import { baseUniformRL } from '../variables';
 
 
 const Container = styled.div`
@@ -158,7 +159,7 @@ const Login:React.FC = () => {
             action.resetForm();
             setSuccess(`loading...\n Please wait!`);
             try {
-                const userData = await axios.post('http://13.50.13.83:5000/api/v1/users/login', vals);
+                const userData = await axios.post(`${baseUniformRL}/api/v1/users/login`, vals);
                 if (userData.data.ok) {
                     login(userData.data.user);
                     setSuccess(userData.data.message);

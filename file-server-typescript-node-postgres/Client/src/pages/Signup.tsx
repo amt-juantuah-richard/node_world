@@ -5,6 +5,7 @@ import { useFormik } from 'formik';
 import styled from 'styled-components';
 import { ArrowBackIosNew } from '@mui/icons-material';
 import axios from 'axios';
+import { baseUniformRL } from '../variables';
 
 const Container = styled.div`
   width: 100vw;
@@ -164,7 +165,7 @@ const Signup:React.FC = () => {
             setSuccess(`Creating your account...\n Please wait!`)
             
             try {
-                const userData = await axios.post('http://13.50.13.83:5000/api/v1/users/register', vals);
+                const userData = await axios.post(`${baseUniformRL}/api/v1/users/register`, vals);
                 
                 if (userData.data.ok) {
                     setSuccess(userData.data.message);

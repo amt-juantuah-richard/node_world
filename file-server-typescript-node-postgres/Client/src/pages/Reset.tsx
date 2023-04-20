@@ -6,6 +6,7 @@ import {UserContext} from '../AuthContext';
 import styled from 'styled-components';
 import * as Yup from 'yup';
 import { ArrowBackIosNew } from '@mui/icons-material';
+import { baseUniformRL } from '../variables';
 
 
 const Container = styled.div`
@@ -103,7 +104,7 @@ const Error = styled.p`
 `;
 
 const SuccessMessage = styled.div`
-    height: auto
+    height: auto;
     width: 250px;
     margin: 10px auto;
     padding: 10px;
@@ -118,7 +119,7 @@ const SuccessMessage = styled.div`
 `;
 
 const FailureMessage = styled.div`
-    height: auto
+    height: auto;
     width: 250px;
     margin: 10px auto;
     padding: 10px;
@@ -163,7 +164,7 @@ const Reset:React.FC = () => {
             action.resetForm();
             setSuccess(`loading...\n Please wait!`);
             try {
-                const userData = await axios.post('http://13.50.13.83:5000/api/v1/users/login', vals);
+                const userData = await axios.post(`${baseUniformRL}/api/v1/users/login`, vals);
                 if (userData.data.ok) {
                     setSuccess(userData.data.message + ". You can log in with your new credentials");
                     setTimeout(() => {

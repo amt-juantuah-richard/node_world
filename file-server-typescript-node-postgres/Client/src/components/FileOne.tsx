@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
 import fileDownload from 'js-file-download';
+import { baseUniformRL } from '../variables';
 
 import { 
     GrDocumentPdf, 
@@ -210,7 +211,7 @@ const File:React.FC<Props> = props => {
     
     const handleDownload = async () => {
         try {
-            const {data} = await axios.post(`http://13.50.13.83:5000/api/v1/files/download`, { file_name: docFile.file_name}, 
+            const {data} = await axios.post(`${baseUniformRL}/api/v1/files/download`, { file_name: docFile.file_name}, 
                 {
                     responseType: "blob"
                 }
@@ -230,7 +231,7 @@ const File:React.FC<Props> = props => {
         const recieverValue = reciever;
         setReciever("");
         try {
-            const { data } = await axios.post("http://13.50.13.83:5000/api/v1/files/mailer", {
+            const { data } = await axios.post(`${baseUniformRL}/api/v1/files/mailer`, {
                 username: user?.username,
                 fileName: docFile.file_name,
                 senderEmail: user?.email,
