@@ -200,7 +200,7 @@ const Signup:React.FC = () => {
                   <Error>{formik.errors.password && formik.touched.password && formik.errors.password}</Error>
                   <Input onChange={formik.handleChange} onBlur={formik.handleBlur} type='password' name='confpassword' value={formik.values.confpassword} placeholder='Confrim Password' />
                   <Error>{formik.errors.confpassword && formik.touched.confpassword && formik.errors.confpassword}</Error>
-                  <Button type='submit'>Login</Button>
+                  <Button type='submit'>Create Account</Button>
                   <Para>Already have an account? <Link to={'/login'}>Login</Link></Para>
               </Form>
           </SelectBox>
