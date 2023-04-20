@@ -4,9 +4,9 @@
   "description": "Server for Document Files with PostgreSQL",
   "main": "server.js",
   "scripts": {
-    "build": "rimraf ./build && tsc",
+    "build": "rimraf ./dist && tsc --build",
     "start:dev": "npx nodemon",
-    "start": "npm run build && node build/server.js",
+    "start": "npm run build && node dist/server.js",
     "test": "jest"
   },
   "keywords": [],
