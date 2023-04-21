@@ -266,6 +266,7 @@ const Files: React.FC<Props> = props => {
                 const uploadedFile = await axios.post(`${baseUniformRL}/api/v1/files/upload/${user?.id}`, vals, {
                     headers: {
                         "Content-Type": "multipart/form-data",
+                        "Access-Control-Allow-Origin": "*",
                       },
                 });
 
