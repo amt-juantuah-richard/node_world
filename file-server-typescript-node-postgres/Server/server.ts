@@ -51,7 +51,7 @@ app.get("/", (req, res) => {
 
 // routes
 app.use("/api/v1/users", userRoute);
-app.use("/api/v1/files", fileRoute);
+app.use("/api/v1/files", cors(), fileRoute);
 
 app.use(errorHandler);
 
