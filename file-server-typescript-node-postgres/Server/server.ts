@@ -27,6 +27,7 @@ app.use(express.static(FILES));
 // allow cors origin
 app.use(express.json());
 app.use(cors());
+app.use(cors({ origin: ['http://localhost:3000', 'http://document-hub-store.onrender.com', 'https://document-hub-store.onrender.com'], credentials: true }))
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
@@ -34,8 +35,7 @@ const homeInfo: string = `
     <p>You can visit the following endpoints:</p>
     <a href="#">/api/v1/users</a>
     <a href="#">/api/v1/files</a>
-    <a href="uploads/Install-Linux-tar_1679923586835.txt"> Install-Linux-tar_1679923586835.txt </a>'
-`;
+    `;
 
 
 app.get("/", (req, res) => {
