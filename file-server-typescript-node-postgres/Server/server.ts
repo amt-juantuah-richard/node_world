@@ -27,7 +27,7 @@ app.use(express.static(FILES));
 // allow cors origin
 app.use(function(req, res, next) {
       // res.header("Access-Control-Allow-Origin", "*");
-      const allowedOrigins = ['http://localhost:3000', 'http://document-hub-store.onrender.com', 'https://document-hub-store.onrender.com', 'https://documenthub.vercel.app'];
+      const allowedOrigins = ['http://localhost:3000', 'http://document-hub-store.onrender.com', 'https://documenthub.onrender.com', 'https://documenthub.vercel.app'];
       const origin = req.headers.origin;
       if (origin && allowedOrigins.includes(origin)) {
            res.setHeader('Access-Control-Allow-Origin', origin);
