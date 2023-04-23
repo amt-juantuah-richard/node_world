@@ -127,6 +127,7 @@ const Fname = styled(Words)`
     font-style: italic;
     font-weight: 12px;
     font-family: monospace;
+    overflow-wrap: anywhere;
 `
 
 const ButtomDiv = styled.div`
