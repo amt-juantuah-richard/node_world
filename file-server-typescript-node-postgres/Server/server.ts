@@ -30,14 +30,12 @@ app.use(function(req, res, next) {
       const allowedOrigins = ['http://localhost:3000', 'http://document-hub-store.onrender.com', 'https://documenthub.onrender.com', 'https://documenthub.vercel.app'];
       const origin = req.headers.origin;
       if (origin && allowedOrigins.includes(origin)) {
-           res.setHeader('Access-Control-Allow-Origin', origin);
-           res.setHeader('Access-Control-Allow-Credentials', 'true');
-           console.log(origin);
+            res.setHeader("Access-Control-Allow-Origin", "*");
+            res.setHeader('Access-Control-Allow-Credentials', 'true');
+            res.setHeader("Access-Control-Allow-Headers", "Access-Control-Allow-Origin, Access-Control-Allow-Headers, Origin, X-Requested-With, Content-Type, Accept, Authorization, Access-Control-Request-Method, Access-Control-Request-Headers");
+            res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, UPDATE");
       }
-      res.setHeader("Access-Control-Allow-Origin", "*");
-      res.setHeader('Access-Control-Allow-Credentials', 'true');
-      res.setHeader("Access-Control-Allow-Headers", "Access-Control-Allow-Origin, Access-Control-Allow-Headers, Origin, X-Requested-With, Content-Type, Accept, Authorization, Access-Control-Request-Method, Access-Control-Request-Headers");
-      res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, UPDATE");
+      
       next();
     });
 app.use(express.json());
