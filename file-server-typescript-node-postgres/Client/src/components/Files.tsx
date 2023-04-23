@@ -242,7 +242,15 @@ const Files: React.FC<Props> = props => {
             console.log(error);
         }
     };
-
+    
+//     get all data after a new file is added
+    useEffect(() = {
+        
+        getData();
+    
+    }, [success])
+    
+//     formik to manage adding a new file
     const formik = useFormik({
         initialValues: {file_title: '', file_description: ''},
         validationSchema: Yup.object({
@@ -272,7 +280,6 @@ const Files: React.FC<Props> = props => {
 
                 if (uploadedFile.data.ok) {
                     setSuccess(uploadedFile.data.message);
-                    getData();
                 }
                 else if (!uploadedFile.data.ok) setFailure(uploadedFile.data.message);
                 setTimeout(()=>{
