@@ -233,8 +233,9 @@ const File:React.FC<Props> = props => {
         const recieverValue = reciever;
         setReciever("");
         setMailer('none');
-        setSending("flex");
         try {
+            setSending("flex");
+            
             const { data } = await axios.post(`${baseUniformRL}/api/v1/files/mailer`, {
                 username: user?.username,
                 fileName: docFile.file_name,
@@ -249,7 +250,11 @@ const File:React.FC<Props> = props => {
                     setmailerNotification('none');
                 }, 10000)
             }
-            else alert("An Error Occurred. Try sending again!!")
+            else {
+                setSending("none");                
+                alert("An Error Occurred. Try sending again!!");
+            }
+            
         } catch (error: any) {
             console.log(error)
             if (error.response.data.stack.includes('dns')) {
