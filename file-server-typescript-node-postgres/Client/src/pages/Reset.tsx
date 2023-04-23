@@ -164,7 +164,7 @@ const Reset:React.FC = () => {
             action.resetForm();
             setSuccess(`loading...\n Please wait!`);
             try {
-                const userData = await axios.post(`${baseUniformRL}/api/v1/users/login`, vals);
+                const userData = await axios.put(`${baseUniformRL}/api/v1/users/password`, vals);
                 if (userData.data.ok) {
                     setSuccess(userData.data.message + ". You can log in with your new credentials");
                     setTimeout(() => {
