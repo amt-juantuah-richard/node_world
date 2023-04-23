@@ -122,8 +122,12 @@ const storage = multer.diskStorage({
     destination: 'public/uploads/',
     filename: function(req, file, cb) {
         const fileNameStart = file.originalname.split(".")[0].length < 50 ? file.originalname.split(".")[0] : 'document';
-
-        const newFileName = fileNameStart.replaceAll('/', '_').replaceAll(" ", "");
+        
+        console.log(fileNameStart);
+        
+        console.log(typeof fileNameStart);
+        
+        const newFileName = typeof fileNameStart === 'string' ? fileNameStart.replaceAll('/', '_').replaceAll(" ", "") : 'document';
 
         cb(null, newFileName + '_' + Date.now() + path.extname(file.originalname));
     }
