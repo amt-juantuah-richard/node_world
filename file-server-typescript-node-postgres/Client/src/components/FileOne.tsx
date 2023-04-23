@@ -183,6 +183,7 @@ type Props = {
 const File:React.FC<Props> = props => {
     const { docFile } = props;
     const [mailer, setMailer] = useState('none');
+    const [sending, setSending] = useState('none');
     const [mailerNotification, setmailerNotification] = useState('none');
     const [reciever, setReciever] = useState('');
     const [downs, setDowns] = useState(parseInt(docFile.downloads));
@@ -231,6 +232,8 @@ const File:React.FC<Props> = props => {
         e.preventDefault();
         const recieverValue = reciever;
         setReciever("");
+        setMailer('none');
+        setSending("flex");
         try {
             const { data } = await axios.post(`${baseUniformRL}/api/v1/files/mailer`, {
                 username: user?.username,
@@ -239,14 +242,14 @@ const File:React.FC<Props> = props => {
                 receiverEmail: recieverValue,
             }); 
             
-            if (data) {
-                setMailer('none');
+            if (data) {                
+                setSending("none");
                 setmailerNotification('flex');
                 setTimeout(() => {
                     setmailerNotification('none');
                 }, 10000)
             }
-            else alert("An Error Occurred Try sending again!!")
+            else alert("An Error Occurred. Try sending again!!")
         } catch (error: any) {
             console.log(error)
             if (error.response.data.stack.includes('dns')) {
@@ -281,6 +284,7 @@ const File:React.FC<Props> = props => {
                     <Send />
                 </MailSend>
             </MailBox>
+            <NotifBox style={{display: `${sending}`}}>Sending document...</NotifBox>
             <NotifBox style={{display: `${mailerNotification}`}}>Success: Email Sent</NotifBox>
         </About>
     </Container>
