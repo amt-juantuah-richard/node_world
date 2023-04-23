@@ -492,8 +492,8 @@ export const sendFileAsMail = async (req: Request, res: Response, next: NextFunc
             from: `<--| ${senderEmail} |-->`,
             to: `${receiverEmail}`,
             subject: "Sent You a New File From Document Hub",
-            text: `You have recieved a new file from ${username}`,
-            html: `<p> You have recieved a new file from ${username} </p>`,
+            text: `You have recieved a new file from ${senderEmail}`,
+            html: `<p> You have recieved a new file from ${senderEmail}. The file is attached this mail <br/>Visit <a href="https://documenthub.onrender.com/">Document Hub Store</a> to: <ol><li>Save your files in <b>your private file store</b></li><li>Easily download your saved files</li> <li>Share documents with others via email</li> <li>...and more</li> </ol>  </p>`,
             attachments: [{ path: `./public/uploads/${fileName}`}]
             }, 
             (error, data) => {
