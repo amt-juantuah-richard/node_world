@@ -91,12 +91,12 @@ export const checkAdminStatus = (req: Request, res: Response, next: NextFunction
  * @param res response object
  * @param next next function
  */
-export const checkUserStatus = (req: Request, res: Response, next: NextFunction) => {
+export const checkUserStatus = async (req: Request, res: Response, next: NextFunction) => {
     // TODO: get the user email here and pass it to the next function as req.body.email; 
     try {
         const id = req.params.id;
 
-        pool.query(getOneUserById, [id], (error, results) => {
+        await pool.query(getOneUserById, [id], (error, results) => {
             if (error) {
                 setError(error, next, 400);
             }

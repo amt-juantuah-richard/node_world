@@ -87,7 +87,7 @@ export const createUser = (req: Request, res: Response, next: NextFunction) => {
  * @param res response object
  * @param next next function
  */
-export const getAUserByUsernameAndPassword = (req: Request, res: Response, next: NextFunction) => {
+export const getAUserByUsernameAndPassword = async (req: Request, res: Response, next: NextFunction) => {
     try {
 
         const { username, password } = req.body;
@@ -97,7 +97,7 @@ export const getAUserByUsernameAndPassword = (req: Request, res: Response, next:
             setError(errorMessage, next, 422);
         }
         else {
-            pool.query(getOneUserByUsernameAndPassword, [username, password], (error, results) => {
+            await pool.query(getOneUserByUsernameAndPassword, [username, password], (error, results) => {
                 if (error) {
                     setError(error, next, 400);
                 }
@@ -123,7 +123,7 @@ export const getAUserByUsernameAndPassword = (req: Request, res: Response, next:
  * @param res response object
  * @param next next function
  */
-export const getAUserById = (req: Request, res: Response, next: NextFunction) => {
+export const getAUserById = async (req: Request, res: Response, next: NextFunction) => {
     try {
 
         const id = req.params.id;
@@ -133,7 +133,7 @@ export const getAUserById = (req: Request, res: Response, next: NextFunction) =>
             setError(errorMessage, next, 400);
         }
         else {
-            pool.query(getOneUserById, [id], (error, results) => {
+            await pool.query(getOneUserById, [id], (error, results) => {
                 if (error) {
                     setError(error, next, 400);
                 }
@@ -259,7 +259,7 @@ export const updateAUserUsername = (req: Request, res: Response, next: NextFunct
  * @param res response object
  * @param next next function
  */
-export const updateAUserPassword = (req: Request, res: Response, next: NextFunction) => {
+export const updateAUserPassword = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { username, email, newPassword } = req.body;
 
@@ -268,7 +268,7 @@ export const updateAUserPassword = (req: Request, res: Response, next: NextFunct
             setError(errorMessage, next, 400);
         }
         else {
-            pool.query(getOneUserByUsernameAndEmail, [username, email], (error, results) => {
+            await pool.query(getOneUserByUsernameAndEmail, [username, email], async (error, results) => {
                 if (error) {
                     setError(error, next, 400);
                 } else if (!results.rows.length) {
@@ -276,7 +276,7 @@ export const updateAUserPassword = (req: Request, res: Response, next: NextFunct
                     setError(errorMessage, next, 404);
                 }
                 else {
-                    pool.query(updateOneUserPassword, [newPassword, username, email], (error, results) => {
+                    await pool.query(updateOneUserPassword, [newPassword, username, email], (error, results) => {
                         if (error) {
                             setError(error, next, 400);
                         }
@@ -315,10 +315,10 @@ export const updateAUserPassword = (req: Request, res: Response, next: NextFunct
  * @param req requet object
  * @param res response object
  */
-export const getFiles = (req: Request, res: Response, next: NextFunction) => {
+export const getFiles = async (req: Request, res: Response, next: NextFunction) => {
     try {
 
-        pool.query(getAllFiles, (error, results) => {
+        await pool.query(getAllFiles, (error, results) => {
             if (error) {
                 setError(error, next, 400);
             }
@@ -336,7 +336,7 @@ export const getFiles = (req: Request, res: Response, next: NextFunction) => {
  * @param req requet object
  * @param res response object
  */
-export const uploadOnePublicFile = (req: Request, res: Response, next: NextFunction) => {
+export const uploadOnePublicFile = async (req: Request, res: Response, next: NextFunction) => {
     try {
 
         const { 
@@ -354,7 +354,7 @@ export const uploadOnePublicFile = (req: Request, res: Response, next: NextFunct
         }
         else {
             
-            pool.query(uploadPublicFile,[file_name, file_description, file_format, file_url, email], (error, results) => {
+            await pool.query(uploadPublicFile,[file_name, file_description, file_format, file_url, email], (error, results) => {
                 if (error) {                    
                     req.file? deleteFileFromDisk(req.file?.path) : '';
                     setError(error, next, 400);
@@ -387,7 +387,7 @@ export const uploadOnePublicFile = (req: Request, res: Response, next: NextFunct
  * @param req requet object
  * @param res response object
  */
-export const uploadFile = (req: Request, res: Response, next: NextFunction) => {
+export const uploadFile = async (req: Request, res: Response, next: NextFunction) => {
     try {
 
         const { 
@@ -405,7 +405,7 @@ export const uploadFile = (req: Request, res: Response, next: NextFunction) => {
         }
         else {
            
-            pool.query(uploadOneFile,[file_name, file_description, file_format, file_url, email, file_title], (error, results) => {
+            await pool.query(uploadOneFile,[file_name, file_description, file_format, file_url, email, file_title], (error, results) => {
                 if (error) {                    
                     req.file? deleteFileFromDisk(req.file?.path) : '';
                     setError(error, next, 400);
@@ -427,16 +427,16 @@ export const uploadFile = (req: Request, res: Response, next: NextFunction) => {
             })
         }
         
-    } catch (error) {
+    } catch (error: any | Error) {
         deleteFileFromDisk(req.file?.path || '');
-        next(error);
+        setError(error, next, 500);
     }
 };
 
-export const getPrivateFilesForOneUser = (req: Request, res: Response, next: NextFunction) => {
+export const getPrivateFilesForOneUser = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const email = req.params.email;
-        pool.query(getPrivateFilesForUser, [email], function (error, results) {
+        await pool.query(getPrivateFilesForUser, [email], function (error, results) {
             if (error) {
                 setError(error, next, 400);
             }
@@ -449,15 +449,15 @@ export const getPrivateFilesForOneUser = (req: Request, res: Response, next: Nex
     }
 }
 
-export const downloadFile = (req: Request, res: Response, next: NextFunction) => {
+export const downloadFile = async (req: Request, res: Response, next: NextFunction) => {
     const { file_name } = req.body;
     try {
-        res.download(`./public/uploads/${file_name}`, function (error) {
+        await res.download(`./public/uploads/${file_name}`, async function (error) {
             if (error) {
                 console.log(error);
                 next(error);
             } else  {
-                pool.query("UPDATE files SET downloads=downloads+1 WHERE file_name=$1", [file_name], function (error, results) {
+                await pool.query("UPDATE files SET downloads=downloads+1 WHERE file_name=$1", [file_name], function (error, results) {
                     if (error) {
                         setError(error, next, 400);
                     }
