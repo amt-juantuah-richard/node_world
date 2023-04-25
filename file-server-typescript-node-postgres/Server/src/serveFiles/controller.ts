@@ -485,7 +485,7 @@ export const sendFileAsMail = async (req: Request, res: Response, next: NextFunc
             secure: true,
             auth: {
                 user: "documenthubmailer@gmail.com",
-                pass: 'az89good',
+                pass: 'myovcduqfoeamcdp',
             }
         });
         let info = await transporter.sendMail({
