@@ -484,7 +484,7 @@ export const sendFileAsMail = async (req: Request, res: Response, next: NextFunc
             port: 465,
             secure: true,
             auth: {
-                user: "documenthubstore@gmail.com",
+                user: "documenthubmailer@gmail.com",
                 pass: 'jgacqetnoneugsez',
             }
         });
