@@ -244,9 +244,9 @@ const Files: React.FC<Props> = props => {
     };
     
 //     get all data after a new file is added
-    useEffect(() => {        
+<!--     useEffect(() => {        
         getData();    
-    }, [success]);
+    }, [success]); -->
     
 //     formik to manage adding a new file
     const formik = useFormik({
@@ -265,7 +265,6 @@ const Files: React.FC<Props> = props => {
         }),
         onSubmit: async (values, action) => {
             const vals = {...values, email: user?.email};
-            console.log(values)
             action.resetForm();
             setSuccess("Uploading your file... Please wait");
             try {
