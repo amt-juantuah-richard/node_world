@@ -357,7 +357,7 @@ const Files: React.FC<Props> = props => {
         <All style={{justifyContent: "space-evenly"}}>
             { user?.id && files ?
                 files
-                    .filter(fyl => String(fyl.file_title).includes(searcher.toLowerCase()) || String(fyl.file_description).includes(searcher.toLowerCase()))
+                    .filter(fyl => String(fyl.file_title).toLowerCase().includes(searcher.toLowerCase()) || String(fyl.file_description).toLowerCase().includes(searcher.toLowerCase()))
                     .map((item, index) => <File key={index} docFile={item} />)
                 : 
                 <>
