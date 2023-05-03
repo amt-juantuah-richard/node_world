@@ -159,6 +159,23 @@ const Downs = styled.div`
     };
 `;
 
+const Privacy = styled.div`
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 2px;
+    width: auto;
+    height: 20px;
+    padding: 3px;
+    border-radius: 5px 0 3px 0;
+    background-color: #04c467;
+    & p {
+        color: gold;
+        font-size: 12px;
+        font-family: monospace;
+    };
+`;
+
 const Button = styled.button`
     border-radius: 5px;
     background: none;
@@ -275,6 +292,9 @@ const File:React.FC<Props> = props => {
             <Downs>
                 <p>{ downs } downloads</p>
             </Downs>
+            <Privacy> 
+                <p> { docFile.privacy == 'private' ? "private" : "public" } </p>
+            </ Privacy>
         </Flag>
         <About>
             <WordBox>
