@@ -223,8 +223,7 @@ const File:React.FC<Props> = props => {
 
             if (data) {
                 fileDownload(data, docFile.file_name);
-                docFile.downloads++;
-                console.log(downs);
+                setDowns(downs + 1);
             }            
         } catch (error) {
             console.log(error)
