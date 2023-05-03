@@ -266,6 +266,7 @@ const Files: React.FC<Props> = props => {
         }),
         onSubmit: async (values, action) => {
             const vals = {...values, email: user?.email};
+            console.log(vals)
             action.resetForm();
             setSuccess("Uploading your file... Please wait");
             try {
