@@ -271,7 +271,7 @@ const File:React.FC<Props> = props => {
             {format}
             <Fname>{ docFile.file_name}</Fname>
             <Downs>
-                <p>{ downs } downloads</p>
+                <p>{ docFile.downloads } downloads</p>
             </Downs>
         </Flag>
         <About>
