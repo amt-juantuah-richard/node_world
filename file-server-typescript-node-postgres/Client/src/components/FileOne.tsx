@@ -224,6 +224,7 @@ const File:React.FC<Props> = props => {
             if (data) {
                 fileDownload(data, docFile.file_name);
                 docFile.downloads++;
+                console.log(downs)
             }            
         } catch (error) {
             console.log(error)
