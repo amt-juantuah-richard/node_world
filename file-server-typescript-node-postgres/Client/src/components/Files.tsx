@@ -244,10 +244,8 @@ const Files: React.FC<Props> = props => {
     };
     
 //     get all data after a new file is added
-    useEffect(() => {
-        
-        getData();
-    
+    useEffect(() => {        
+        getData();    
     }, [success]);
     
 //     formik to manage adding a new file
@@ -299,7 +297,6 @@ const Files: React.FC<Props> = props => {
 
     })
 
-   
 
     useEffect( () => {
         getData();
@@ -321,7 +318,7 @@ const Files: React.FC<Props> = props => {
                 <SearchIconBox>
                     <SearchRounded />
                 </SearchIconBox>
-                <Search type="text" /*onChange={handleSearch}*/ name='search' onChange={(e) => setSearcher(e.target.value)} placeholder="Search for a file..."/>
+                <Search type="text" /*onChange={handleSearch}*/ name='search' onChange={(e) => setSearcher(String(e.target.value).toLowerCase())} placeholder="Search for a file..."/>
             </SearchBox>
             <SelectBox>
                 {!failure && success ? <SuccessMessage>{success}</SuccessMessage> : ''}
@@ -357,7 +354,7 @@ const Files: React.FC<Props> = props => {
         <All style={{justifyContent: "space-evenly"}}>
             { user?.id && files ?
                 files
-                    .filter(fyl => String(fyl.file_title).toLowerCase().includes(searcher.toLowerCase()) || String(fyl.file_description).toLowerCase().includes(searcher.toLowerCase()))
+                    .filter(fyl => String(fyl.file_title).toLowerCase().includes(searcher) || String(fyl.file_description).toLowerCase().includes(searcher))
                     .map((item, index) => <File key={index} docFile={item} />)
                 : 
                 <>
