@@ -244,9 +244,9 @@ const Files: React.FC<Props> = props => {
     };
     
 //     get all data after a new file is added
-<!--     useEffect(() => {        
-        getData();    
-    }, [success]); -->
+//    useEffect(() => {        
+//       getData();    
+//    }, [success]);
     
 //     formik to manage adding a new file
     const formik = useFormik({
