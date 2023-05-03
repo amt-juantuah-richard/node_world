@@ -186,7 +186,7 @@ const File:React.FC<Props> = props => {
     const [sending, setSending] = useState('none');
     const [mailerNotification, setmailerNotification] = useState('none');
     const [reciever, setReciever] = useState('');
-    const [downs, setDowns] = useState(parseInt(docFile.downloads));
+    const [downs, setDowns] = useState(0);
     const [format, setFormat] = useState(<GrDocument />)
     const {user} = useContext(UserContext);
 
@@ -194,7 +194,9 @@ const File:React.FC<Props> = props => {
         setMailer(mailer === 'none' ? 'flex' : 'none');
     }
 
-    
+    useEffect(() => {
+        setDowns(parseInt(docFile.downloads));
+    }, [docFile.downloads])
     
     useEffect(() => {
         const formatString = docFile.file_format.split("/")[1];
@@ -221,7 +223,7 @@ const File:React.FC<Props> = props => {
 
             if (data) {
                 fileDownload(data, docFile.file_name);
-                setDowns(downs + 1);
+                docFile.downloads++;
             }            
         } catch (error) {
             console.log(error)
