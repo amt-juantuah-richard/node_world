@@ -273,7 +273,7 @@ const File:React.FC<Props> = props => {
             {format}
             <Fname>{ docFile.file_name}</Fname>
             <Downs>
-                <p>{ docFile.downloads } downloads</p>
+                <p>{ downs } downloads</p>
             </Downs>
         </Flag>
         <About>
