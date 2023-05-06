@@ -289,7 +289,6 @@ const Files: React.FC<Props> = props => {
                 .required('Description is required')
                 .min(10, 'Decription is too short')
                 .max(200, 'Description is too long'), 
-            privacy: Yup.object().optional(),
             document: Yup.mixed()
                 .required('File is required'),
         }),
@@ -300,6 +299,56 @@ const Files: React.FC<Props> = props => {
             setSuccess("Uploading your file... Please wait");
             try {
                 const uploadedFile = await axios.post(`${baseUniformRL}/api/v1/files/upload/${user?.id}`, vals, {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                        "Access-Control-Allow-Origin": "*",
+                      },
+                });
+
+                if (uploadedFile.data.ok) {
+                    setSuccess(uploadedFile.data.message);
+                }
+                else if (!uploadedFile.data.ok) setFailure(uploadedFile.data.message);
+                setTimeout(()=>{
+                    setFailure('');
+                    setSuccess('');
+                },3000)
+                
+            } catch (error: any) {
+                const msg: string = error.response.data.message;
+                setFailure(msg);
+                setTimeout(()=>{
+                    setFailure('');
+                    setSuccess('');
+                },3000)
+            }
+        }
+
+    })
+
+    //     admin formik to manage adding a new file
+    const adminformik = useFormik({
+        initialValues: {file_title: '', file_description: ''},
+        validationSchema: Yup.object({
+            file_title: Yup.string()
+                .required('Title is required')
+                .min(5, 'Title is too short')
+                .max(30, 'Title is too long'), 
+            file_description: Yup.string()
+                .required('Description is required')
+                .min(10, 'Decription is too short')
+                .max(200, 'Description is too long'), 
+            privacy: Yup.object().required('file privacy is required'),
+            document: Yup.mixed()
+                .required('File is required'),
+        }),
+        onSubmit: async (values, action) => {
+            const vals = {...values, email: user?.email};
+            console.log(vals)
+            action.resetForm();
+            setSuccess("Uploading your file... Please wait");
+            try {
+                const uploadedFile = await axios.post(`${baseUniformRL}/api/v1/files/upload/admin/${user?.id}`, vals, {
                     headers: {
                         "Content-Type": "multipart/form-data",
                         "Access-Control-Allow-Origin": "*",
@@ -351,37 +400,58 @@ const Files: React.FC<Props> = props => {
                 </SearchIconBox>
                 <Search type="text" /*onChange={handleSearch}*/ name='search' onChange={(e) => setSearcher(String(e.target.value).toLowerCase())} placeholder="Search for a file..."/>
             </SearchBox>
-            <SelectBox>
-                {!failure && success ? <SuccessMessage>{success}</SuccessMessage> : ''}
-                {failure ? <FailureMessage>{failure}</FailureMessage> : ''}
-                <Form onSubmit={formik.handleSubmit} encType="multipart/form-data">
-                    <Word>Have a Document to add to your Store Here?</Word>
-                    { user && user.id ?
-                        <>
-                            <Input onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.file_title} type='text' name='file_title' placeholder='Enter doc title' />
-                            <Error>{formik.errors.file_title && formik.touched.file_title && formik.errors.file_title}</Error>
-                            <Input onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.file_description} type='text' name='file_description' placeholder='Enter doc description' />
-                            <Error>{formik.errors.file_description && formik.touched.file_description && formik.errors.file_description}</Error>
-                            {user && user.isadmin ?
+            { user && user.isadmin ? 
+                <SelectBox>
+                    {!failure && success ? <SuccessMessage>{success}</SuccessMessage> : ''}
+                    {failure ? <FailureMessage>{failure}</FailureMessage> : ''}
+                    <Form onSubmit={formik.handleSubmit} encType="multipart/form-data">
+                        <Word>Have a Document to add to your Store Here?</Word>
+                        { user && user.id ?
+                            <>
+                                <Input onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.file_title} type='text' name='file_title' placeholder='Enter doc title' />
+                                <Error>{formik.errors.file_title && formik.touched.file_title && formik.errors.file_title}</Error>
+                                <Input onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.file_description} type='text' name='file_description' placeholder='Enter doc description' />
+                                <Error>{formik.errors.file_description && formik.touched.file_description && formik.errors.file_description}</Error>
                                 <Select name='privacy' onChange={(e) => {console.log(e.currentTarget.value); formik.setFieldValue('privacy', e.currentTarget.value)}} 
-                                
                                 onBlur={formik.handleBlur}>
                                     <Option value=''>--choose file privacy--</Option>
                                     <Option value='private'>private</Option>
                                     <Option value='public'>public</Option>
                                 </Select>
-                                : ''
-                            }
-                            <Input required onChange={(e) => {
-                                if(e.currentTarget.files) {                                
-                                    formik.setFieldValue('document', e.currentTarget.files[0])}}} onBlur={formik.handleBlur}  type='file' name='document' />
-                            {/* <Error>{formik.errors.document && formik.touched.document && formik.errors.document}</Error> */}
-                            <Button type='submit'>Upload File</Button>
-                        </>
-                        : <NotLogWord>Create account or Log in to add files to your personal documents store</NotLogWord>
-                    }
-                </Form>
-            </SelectBox>
+                                <Input required onChange={(e) => {
+                                    if(e.currentTarget.files) {                                
+                                        formik.setFieldValue('document', e.currentTarget.files[0])}}} onBlur={formik.handleBlur}  type='file' name='document' />
+                                {/* <Error>{formik.errors.document && formik.touched.document && formik.errors.document}</Error> */}
+                                <Button type='submit'>Upload File</Button>
+                            </>
+                            : <NotLogWord>Create account or Log in to add files to your personal documents store</NotLogWord>
+                        }
+                    </Form>
+                </SelectBox>
+            :
+                <SelectBox>
+                    {!failure && success ? <SuccessMessage>{success}</SuccessMessage> : ''}
+                    {failure ? <FailureMessage>{failure}</FailureMessage> : ''}
+                    <Form onSubmit={adminformik.handleSubmit} encType="multipart/form-data">
+                        <Word>Have a Document to add to your Store Here?</Word>
+                        { user && user.id ?
+                            <>
+                                <Input onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.file_title} type='text' name='file_title' placeholder='Enter doc title' />
+                                <Error>{formik.errors.file_title && formik.touched.file_title && formik.errors.file_title}</Error>
+                                <Input onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.file_description} type='text' name='file_description' placeholder='Enter doc description' />
+                                <Error>{formik.errors.file_description && formik.touched.file_description && formik.errors.file_description}</Error>
+                                
+                                <Input required onChange={(e) => {
+                                    if(e.currentTarget.files) {                                
+                                        formik.setFieldValue('document', e.currentTarget.files[0])}}} onBlur={formik.handleBlur}  type='file' name='document' />
+                                {/* <Error>{formik.errors.document && formik.touched.document && formik.errors.document}</Error> */}
+                                <Button type='submit'>Upload File</Button>
+                            </>
+                            : <NotLogWord>Create account or Log in to add files to your personal documents store</NotLogWord>
+                        }
+                    </Form>
+                </SelectBox>
+            }
         </FilterBox>
         <HeadWord>{user?.id && files ? `PRVATE: Hi, Your Private Files Can Be Seen By Only You` : ""}</HeadWord>
         <All style={{justifyContent: "space-evenly"}}>

@@ -18,7 +18,7 @@ import {
     updateOneUserPassword,
     getOneUserById,
     uploadOneFile,
-    uploadPublicFile,
+    uploadAdminFile,
     getPrivateFilesForUser,
     getAllPublicFiles,
 } from './queries';
@@ -337,7 +337,7 @@ export const getFiles = async (req: Request, res: Response, next: NextFunction) 
  * @param req requet object
  * @param res response object
  */
-export const uploadOnePublicFile = async (req: Request, res: Response, next: NextFunction) => {
+export const uploadOneAdminFile = async (req: Request, res: Response, next: NextFunction) => {
     try {
 
         const { 
@@ -346,16 +346,17 @@ export const uploadOnePublicFile = async (req: Request, res: Response, next: Nex
             file_description,
             file_format,
             file_url,
-            email
+            email,
+            privacy
         } = req.body;
-        if (!file_title || !file_name || !file_description || !file_format || !file_url || !email) {
+        if (!file_title || !file_name || !file_description || !file_format || !file_url || !email || !privacy) {
             req.file? deleteFileFromDisk(req.file?.path) : '';
             const errorMessage = 'Document not saved in DB. Something went wrong';
             setError(errorMessage, next, 400);
         }
         else {
-            
-            await pool.query(uploadPublicFile,[file_name, file_description, file_format, file_url, email], (error, results) => {
+
+            await pool.query(uploadAdminFile,[file_name, file_description, file_format, file_url, email, file_title, privacy], (error, results) => {
                 if (error) {                    
                     req.file? deleteFileFromDisk(req.file?.path) : '';
                     setError(error, next, 400);
@@ -365,11 +366,12 @@ export const uploadOnePublicFile = async (req: Request, res: Response, next: Nex
                         ok: true,
                         message: "Document was saved Successfully with the following information",
                         document: {
-                            file_title: file_title,
                             file_description: file_description,
-                            downloads: 0,
-                            file_format: file_format,
+                            file_title: file_title,
                             file_name: file_name,
+                            file_format: file_format,
+                            file_url: file_url,   
+                            user_email: email
                         }               
                     });
                 }

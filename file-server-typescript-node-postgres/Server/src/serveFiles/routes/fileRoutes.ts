@@ -3,7 +3,7 @@ import {
     getFiles, 
     getPrivateFilesForOneUser, 
     uploadFile,
-    uploadOnePublicFile,
+    uploadOneAdminFile,
     downloadFile,
     sendFileAsMail,
     getPublicFiles
@@ -21,7 +21,7 @@ router.get("/", checkAdminStatus, getFiles);
 router.get("/:id/:email", checkUserStatus, getPrivateFilesForOneUser);
 router.get("/public/:id/:email", checkUserStatus, getPublicFiles);
 router.post("/upload/:id", checkUserStatus, upLoadOneFile, uploadFile);
-router.post("/upload/admin/:id", checkAdminStatus, upLoadOneFile, uploadOnePublicFile);
+router.post("/upload/admin/:id", checkAdminStatus, upLoadOneFile, uploadOneAdminFile);
 router.post("/download", downloadFile);
 router.post("/mailer", sendFileAsMail);
 
