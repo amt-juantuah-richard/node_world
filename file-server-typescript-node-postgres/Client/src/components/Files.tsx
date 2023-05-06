@@ -279,7 +279,7 @@ const Files: React.FC<Props> = props => {
     
 //     formik to manage adding a new file
     const formik = useFormik({
-        initialValues: {file_title: '', file_description: '', privacy: '--choose file privacy--'},
+        initialValues: {file_title: '', file_description: ''},
         validationSchema: Yup.object({
             file_title: Yup.string()
                 .required('Title is required')
@@ -365,8 +365,8 @@ const Files: React.FC<Props> = props => {
                             {user && user.isadmin ?
                                 <Select name='privacy' onChange={(e) => {console.log(e.currentTarget.value); formik.setFieldValue('privacy', e.currentTarget.value)}} 
                                 
-                                onBlur={formik.handleBlur} value={formik.values.privacy}>
-                                    <Option>--choose file privacy--</Option>
+                                onBlur={formik.handleBlur}>
+                                    <Option value=''>--choose file privacy--</Option>
                                     <Option value='private'>private</Option>
                                     <Option value='public'>public</Option>
                                 </Select>
