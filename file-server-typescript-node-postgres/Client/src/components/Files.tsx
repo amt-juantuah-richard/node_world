@@ -118,6 +118,15 @@ const Word = styled.span`
     font-size: 14px;
 `;
 
+const HeadWord = styled.h4`
+    text-align: center;
+    margin: 20px auto;
+    margin-top: 60px;
+    margin: 18px;
+    font-weight: 600;
+    font-size: 14px;
+`;
+
 const NotLogWord = styled.span`
     text-align: center;
     margin: 18px auto;
@@ -223,6 +232,7 @@ const Files: React.FC<Props> = props => {
     const [failure, setFailure] = useState('');
     
     const [files, setFiles] = useState(allFiles);
+    const [publicfiles, setPublicFiles] = useState(allFiles);
     const [searcher, setSearcher] = useState('');
 
     const getData = async () => {
@@ -238,6 +248,25 @@ const Files: React.FC<Props> = props => {
                     }
                 );
                 setFiles(data);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const getPublicData = async () => {
+        try {
+            if (user && user.id) {
+
+                const { data } = await axios.get(
+                    `${baseUniformRL}/api/v1/files/public/${user.id}/${user.email}`,
+                    {
+                        headers: {
+                            Accept: 'application/json',
+                        },
+                    }
+                );
+                setPublicFiles(data);
             }
         } catch (error) {
             console.log(error);
@@ -302,15 +331,16 @@ const Files: React.FC<Props> = props => {
 
     useEffect( () => {
         getData();
+        getPublicData();
     },[]);
 
-    const docFile = {
-        file_format: 'application/pdf',
-        file_name: 'not_a_real_file.pdf',
-        downloads: 3445,
-        file_title: 'Example File',
-        file_description: 'This is a test file'
-    }
+    // const docFile = {
+    //     file_format: 'application/pdf',
+    //     file_name: 'not_a_real_file.pdf',
+    //     downloads: 3445,
+    //     file_title: 'Example File',
+    //     file_description: 'This is a test file'
+    // }
 
 
   return (
@@ -352,7 +382,7 @@ const Files: React.FC<Props> = props => {
                 </Form>
             </SelectBox>
         </FilterBox>
-        <Word>{user?.id && files ? `PRVATE::: Hi <b style={{color: "gold"}}>${user.username}</b>, Your Private Files Can Be Seen By Only You` : ""}</Word>
+        <HeadWord>{user?.id && files ? `PRVATE: Hi ${user.username}, Your Private Files Can Be Seen By Only You` : ""}</HeadWord>
         <All style={{justifyContent: "space-evenly"}}>
             { user?.id && files ?
                 files
@@ -366,10 +396,10 @@ const Files: React.FC<Props> = props => {
             }
                         
         </All>
-        <Word>{user?.id ? `PUBLIC::: All Public Files are available to all registered users` : ""}</Word>
+        <HeadWord>{user?.id ? `PUBLIC: All Public Files are available to all registered users` : ""}</HeadWord>
         <All style={{justifyContent: "space-evenly"}}>
-            { user?.id && files ?
-                files
+            { user?.id && publicfiles ?
+                publicfiles
                     .filter(fyl => String(fyl.file_title).toLowerCase().includes(searcher) || String(fyl.file_description).toLowerCase().includes(searcher))
                     .map((item, index) => <File key={index} docFile={item} />)
                 : 
