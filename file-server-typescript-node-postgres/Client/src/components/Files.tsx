@@ -363,7 +363,9 @@ const Files: React.FC<Props> = props => {
                             <Input onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.file_description} type='text' name='file_description' placeholder='Enter doc description' />
                             <Error>{formik.errors.file_description && formik.touched.file_description && formik.errors.file_description}</Error>
                             {user && user.isadmin ?
-                                <Select name='privacy' onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.privacy}>
+                                <Select name='privacy' onChange={(e) => {formik.setFieldValue('privacy', e.currentTarget.value)}} 
+                                
+                                onBlur={formik.handleBlur} value={formik.values.privacy}>
                                     <Option>--choose file privacy--</Option>
                                     <Option value='private'>private</Option>
                                     <Option value='public'>public</Option>
