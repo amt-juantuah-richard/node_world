@@ -383,7 +383,7 @@ const Files: React.FC<Props> = props => {
         </FilterBox>
         <HeadWord>{user?.id && files ? `PRVATE: Hi, Your Private Files Can Be Seen By Only You` : ""}</HeadWord>
         <All style={{justifyContent: "space-evenly"}}>
-            { user?.id && files ?
+            { user?.id && files.length ?
                 files
                     .filter(fyl => String(fyl.file_title).toLowerCase().includes(searcher) || String(fyl.file_description).toLowerCase().includes(searcher))
                     .map((item, index) => <File key={index} docFile={item} />)
@@ -395,9 +395,9 @@ const Files: React.FC<Props> = props => {
             }
                         
         </All>
-        <HeadWord>{user?.id && publicfiles.length ? `PUBLIC: All Public Files are available to all registered users` : ""}</HeadWord>
+        <HeadWord>{user?.id ? `PUBLIC FILES: ` : ""}</HeadWord>
         <All style={{justifyContent: "space-evenly"}}>
-            { user?.id && publicfiles ?
+            { user?.id && publicfiles.length ?
                 publicfiles
                     .filter(fyl => String(fyl.file_title).toLowerCase().includes(searcher) || String(fyl.file_description).toLowerCase().includes(searcher))
                     .map((item, index) => <File key={index} docFile={item} />)
