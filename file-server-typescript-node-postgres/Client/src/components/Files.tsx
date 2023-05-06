@@ -476,7 +476,7 @@ const Files: React.FC<Props> = props => {
                     .map((item, index) => <File key={index} docFile={item} />)
                 : user?.id && !publicfiles.length ?
                 <NotLogWord>No Public Files Available as at Now. Check back later</NotLogWord>
-                : <NotLogWord> Public Files are Available to only registered users. Register for free</NotLogWord>
+                : <NotLogWord> Public Files are Available to only registered users. Login or Register for free</NotLogWord>
                     
             }
                         
