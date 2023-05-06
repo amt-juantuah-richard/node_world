@@ -124,7 +124,6 @@ const HeadWord = styled.h4`
     margin-top: 60px;
     margin: 18px;
     font-weight: 600;
-    font-size: 14px;
 `;
 
 const NotLogWord = styled.span`
@@ -382,7 +381,7 @@ const Files: React.FC<Props> = props => {
                 </Form>
             </SelectBox>
         </FilterBox>
-        <HeadWord>{user?.id && files ? `PRVATE: Hi ${user.username}, Your Private Files Can Be Seen By Only You` : ""}</HeadWord>
+        <HeadWord>{user?.id && files ? `PRVATE: Hi ${<b style={{color: "gold"}}>{user.username}</b>}, Your Private Files Can Be Seen By Only You` : ""}</HeadWord>
         <All style={{justifyContent: "space-evenly"}}>
             { user?.id && files ?
                 files
