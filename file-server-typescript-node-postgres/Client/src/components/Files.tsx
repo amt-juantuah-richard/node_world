@@ -363,7 +363,7 @@ const Files: React.FC<Props> = props => {
                             <Input onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.file_description} type='text' name='file_description' placeholder='Enter doc description' />
                             <Error>{formik.errors.file_description && formik.touched.file_description && formik.errors.file_description}</Error>
                             {user && user.isadmin ?
-                                <Select name='privacy' onChange={(e) => {formik.setFieldValue('privacy', e.currentTarget.value)}} 
+                                <Select name='privacy' onChange={(e) => {console.log(e.currentTarget.value); formik.setFieldValue('privacy', e.currentTarget.value)}} 
                                 
                                 onBlur={formik.handleBlur} value={formik.values.privacy}>
                                     <Option>--choose file privacy--</Option>
@@ -376,7 +376,7 @@ const Files: React.FC<Props> = props => {
                                 if(e.currentTarget.files) {                                
                                     formik.setFieldValue('document', e.currentTarget.files[0])}}} onBlur={formik.handleBlur}  type='file' name='document' />
                             {/* <Error>{formik.errors.document && formik.touched.document && formik.errors.document}</Error> */}
-                            <Button type='submit'>Save</Button>
+                            <Button type='submit'>Upload File</Button>
                         </>
                         : <NotLogWord>Create account or Log in to add files to your personal documents store</NotLogWord>
                     }
