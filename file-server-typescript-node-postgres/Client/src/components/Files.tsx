@@ -118,12 +118,13 @@ const Word = styled.span`
     font-size: 14px;
 `;
 
-const HeadWord = styled.h4`
-    text-align: center;
-    margin: 20px auto;
-    margin-top: 60px;
-    margin: 18px;
+const HeadWord = styled.h2`
+    text-align: left;
+    margin-bottom: 30px;
+    margin-top: 80px;
+    padding-left: 15px;
     font-weight: 600;
+    border-left: 5px solid gold;
 `;
 
 const NotLogWord = styled.span`
@@ -455,31 +456,28 @@ const Files: React.FC<Props> = props => {
                 </SelectBox>
             }
         </FilterBox>
-        <HeadWord>{user?.id && files ? `PRVATE: Hi, Your Private Files Can Be Seen By Only You` : ""}</HeadWord>
+        <HeadWord>{user?.id && files ? `YOUR PRVATE FILES: Available to only You` : ""}</HeadWord>
         <All style={{justifyContent: "space-evenly"}}>
             { user?.id && files.length ?
                 files
                     .filter(fyl => String(fyl.file_title).toLowerCase().includes(searcher) || String(fyl.file_description).toLowerCase().includes(searcher))
                     .map((item, index) => <File key={index} docFile={item} />)
-                : 
-                <>
+                : user?.id && !files.length ?
                     <NotLogWord>No Private Files. Add a New File </NotLogWord>
-                    
-                </>
+                : <NotLogWord>Login to view your files </NotLogWord>
             }
                         
         </All>
-        <HeadWord>{user?.id ? `PUBLIC FILES: ` : ""}</HeadWord>
+        <HeadWord>{user?.id ? `ALL PUBLIC FILES: Available to the Public` : ""}</HeadWord>
         <All style={{justifyContent: "space-evenly"}}>
             { user?.id && publicfiles.length ?
                 publicfiles
                     .filter(fyl => String(fyl.file_title).toLowerCase().includes(searcher) || String(fyl.file_description).toLowerCase().includes(searcher))
                     .map((item, index) => <File key={index} docFile={item} />)
-                : 
-                <>
-                    <NotLogWord>No Public Files Available as at Now. Check back later</NotLogWord>
+                : user?.id && !publicfiles.length ?
+                <NotLogWord>No Public Files Available as at Now. Check back later</NotLogWord>
+                : <NotLogWord> Public Files are Available to only registered users. Register for free</NotLogWord>
                     
-                </>
             }
                         
         </All>
