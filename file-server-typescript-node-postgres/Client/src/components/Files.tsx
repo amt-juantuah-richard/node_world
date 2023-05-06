@@ -381,7 +381,7 @@ const Files: React.FC<Props> = props => {
                 </Form>
             </SelectBox>
         </FilterBox>
-        <HeadWord>{user?.id && files ? `PRVATE: Hi ${<b style={{color: "gold"}}>{user.username}</b>}, Your Private Files Can Be Seen By Only You` : ""}</HeadWord>
+        <HeadWord>{user?.id && files ? `PRVATE: Hi, Your Private Files Can Be Seen By Only You` : ""}</HeadWord>
         <All style={{justifyContent: "space-evenly"}}>
             { user?.id && files ?
                 files
@@ -395,7 +395,7 @@ const Files: React.FC<Props> = props => {
             }
                         
         </All>
-        <HeadWord>{user?.id ? `PUBLIC: All Public Files are available to all registered users` : ""}</HeadWord>
+        <HeadWord>{user?.id && publicfiles ? `PUBLIC: All Public Files are available to all registered users` : ""}</HeadWord>
         <All style={{justifyContent: "space-evenly"}}>
             { user?.id && publicfiles ?
                 publicfiles
