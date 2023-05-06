@@ -18,7 +18,7 @@ export const uploadOneFile = 'INSERT INTO files (file_name, file_description, fi
 
 export const uploadAdminFile = 'INSERT INTO files (file_name, file_description, file_format, file_url, user_email, file_title, privacy) VALUES ($1, $2, $3, $4, $5, $6, $7)';
 
-export const getPrivateFilesForUser = 'SELECT * FROM files where user_email=$1 order by date_added desc';
+export const getPrivateFilesForUser = 'SELECT * FROM files where user_email=$1 and privacy=\'private\' order by date_added desc';
 
 export const getAllPublicFiles = 'SELECT * FROM files WHERE privacy=\'public\'';
 
