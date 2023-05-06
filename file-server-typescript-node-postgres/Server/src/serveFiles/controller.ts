@@ -19,7 +19,8 @@ import {
     getOneUserById,
     uploadOneFile,
     uploadPublicFile,
-    getPrivateFilesForUser
+    getPrivateFilesForUser,
+    getAllPublicFiles,
 } from './queries';
 
 
@@ -444,6 +445,21 @@ export const getPrivateFilesForOneUser = async (req: Request, res: Response, nex
                 res.status(200).json(results.rows);
             }
         })
+    } catch (error) {
+        next(error);
+    }
+}
+
+export const getPublicFiles = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+
+        await pool.query(getAllPublicFiles, (error, results) => {
+            if (error) {
+                setError(error, next, 400);
+            }
+            else res.status(200).json(results.rows);
+        })
+        
     } catch (error) {
         next(error);
     }

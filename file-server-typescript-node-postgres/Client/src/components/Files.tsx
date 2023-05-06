@@ -103,6 +103,7 @@ const All = styled.div`
     justify-content: space-between;
     row-gap: 75px;
     column-gap: 48px;
+    margin-bottom: 50px;
     @media screen and (max-width: 680px) {
         padding-left: 27px;
         padding-right: 27px;
@@ -351,7 +352,7 @@ const Files: React.FC<Props> = props => {
                 </Form>
             </SelectBox>
         </FilterBox>
-
+        <Word>{user?.id && files ? `PRVATE::: Hi <b style={{color: "gold"}}>${user.username}</b>, Your Private Files Can Be Seen By Only You` : ""}</Word>
         <All style={{justifyContent: "space-evenly"}}>
             { user?.id && files ?
                 files
@@ -359,8 +360,22 @@ const Files: React.FC<Props> = props => {
                     .map((item, index) => <File key={index} docFile={item} />)
                 : 
                 <>
-                    <NotLogWord>No Files. Add a New File. Files will look like the component below</NotLogWord>
-                    <File docFile={docFile} />
+                    <NotLogWord>No Private Files. Add a New File </NotLogWord>
+                    
+                </>
+            }
+                        
+        </All>
+        <Word>{user?.id ? `PUBLIC::: All Public Files are available to all registered users` : ""}</Word>
+        <All style={{justifyContent: "space-evenly"}}>
+            { user?.id && files ?
+                files
+                    .filter(fyl => String(fyl.file_title).toLowerCase().includes(searcher) || String(fyl.file_description).toLowerCase().includes(searcher))
+                    .map((item, index) => <File key={index} docFile={item} />)
+                : 
+                <>
+                    <NotLogWord>No Public Files Available as at Now. Check back later</NotLogWord>
+                    
                 </>
             }
                         
