@@ -404,24 +404,24 @@ const Files: React.FC<Props> = props => {
                 <SelectBox>
                     {!failure && success ? <SuccessMessage>{success}</SuccessMessage> : ''}
                     {failure ? <FailureMessage>{failure}</FailureMessage> : ''}
-                    <Form onSubmit={formik.handleSubmit} encType="multipart/form-data">
+                    <Form onSubmit={adminformik.handleSubmit} encType="multipart/form-data">
                         <Word>Have a Document to add to your Store Here?</Word>
                         { user && user.id ?
                             <>
-                                <Input onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.file_title} type='text' name='file_title' placeholder='Enter doc title' />
-                                <Error>{formik.errors.file_title && formik.touched.file_title && formik.errors.file_title}</Error>
-                                <Input onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.file_description} type='text' name='file_description' placeholder='Enter doc description' />
-                                <Error>{formik.errors.file_description && formik.touched.file_description && formik.errors.file_description}</Error>
-                                <Select name='privacy' onChange={(e) => {console.log(e.currentTarget.value); formik.setFieldValue('privacy', e.currentTarget.value)}} 
-                                onBlur={formik.handleBlur}>
+                                <Input onChange={adminformik.handleChange} onBlur={adminformik.handleBlur} value={adminformik.values.file_title} type='text' name='file_title' placeholder='Enter doc title' />
+                                <Error>{adminformik.errors.file_title && adminformik.touched.file_title && adminformik.errors.file_title}</Error>
+                                <Input onChange={adminformik.handleChange} onBlur={adminformik.handleBlur} value={adminformik.values.file_description} type='text' name='file_description' placeholder='Enter doc description' />
+                                <Error>{adminformik.errors.file_description && adminformik.touched.file_description && adminformik.errors.file_description}</Error>
+                                <Select name='privacy' onChange={(e) => {console.log(e.currentTarget.value); adminformik.setFieldValue('privacy', e.currentTarget.value)}} 
+                                onBlur={adminformik.handleBlur}>
                                     <Option value=''>--choose file privacy--</Option>
                                     <Option value='private'>private</Option>
                                     <Option value='public'>public</Option>
                                 </Select>
                                 <Input required onChange={(e) => {
                                     if(e.currentTarget.files) {                                
-                                        formik.setFieldValue('document', e.currentTarget.files[0])}}} onBlur={formik.handleBlur}  type='file' name='document' />
-                                {/* <Error>{formik.errors.document && formik.touched.document && formik.errors.document}</Error> */}
+                                        adminformik.setFieldValue('document', e.currentTarget.files[0])}}} onBlur={adminformik.handleBlur}  type='file' name='document' />
+                                {/* <Error>{adminformik.errors.document && adminformik.touched.document && adminformik.errors.document}</Error> */}
                                 <Button type='submit'>Upload File</Button>
                             </>
                             : <NotLogWord>Create account or Log in to add files to your personal documents store</NotLogWord>
@@ -432,7 +432,7 @@ const Files: React.FC<Props> = props => {
                 <SelectBox>
                     {!failure && success ? <SuccessMessage>{success}</SuccessMessage> : ''}
                     {failure ? <FailureMessage>{failure}</FailureMessage> : ''}
-                    <Form onSubmit={adminformik.handleSubmit} encType="multipart/form-data">
+                    <Form onSubmit={formik.handleSubmit} encType="multipart/form-data">
                         <Word>Have a Document to add to your Store Here?</Word>
                         { user && user.id ?
                             <>
