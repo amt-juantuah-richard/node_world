@@ -296,6 +296,7 @@ const Files: React.FC<Props> = props => {
             const vals = {...values, email: user?.email};
             console.log(vals)
             action.resetForm();
+            (document.getElementById("formID") as HTMLFormElement).reset();
             setSuccess("Uploading your file... Please wait");
             try {
                 const uploadedFile = await axios.post(`${baseUniformRL}/api/v1/files/upload/${user?.id}`, vals, {
@@ -338,7 +339,7 @@ const Files: React.FC<Props> = props => {
                 .required('Description is required')
                 .min(10, 'Decription is too short')
                 .max(200, 'Description is too long'), 
-            privacy: Yup.object().required('file privacy is required'),
+            // privacy: Yup.object().required('file privacy is required'),
             document: Yup.mixed()
                 .required('File is required'),
         }),
@@ -346,6 +347,7 @@ const Files: React.FC<Props> = props => {
             const vals = {...values, email: user?.email};
             console.log(vals)
             action.resetForm();
+            (document.getElementById("formID") as HTMLFormElement).reset();
             setSuccess("Uploading your file... Please wait");
             try {
                 const uploadedFile = await axios.post(`${baseUniformRL}/api/v1/files/upload/admin/${user?.id}`, vals, {
@@ -404,9 +406,9 @@ const Files: React.FC<Props> = props => {
                 <SelectBox>
                     {!failure && success ? <SuccessMessage>{success}</SuccessMessage> : ''}
                     {failure ? <FailureMessage>{failure}</FailureMessage> : ''}
-                    <Form onSubmit={adminformik.handleSubmit} encType="multipart/form-data">
-                        <Word>Have a Document to add to your Store Here?</Word>
-                        { user && user.id ?
+                    <Form id="formID" onSubmit={adminformik.handleSubmit} encType="multipart/form-data">
+                        <Word>Add Document as ADMINISTRATOR</Word>
+                        { user.id ?
                             <>
                                 <Input onChange={adminformik.handleChange} onBlur={adminformik.handleBlur} value={adminformik.values.file_title} type='text' name='file_title' placeholder='Enter doc title' />
                                 <Error>{adminformik.errors.file_title && adminformik.touched.file_title && adminformik.errors.file_title}</Error>
@@ -432,7 +434,7 @@ const Files: React.FC<Props> = props => {
                 <SelectBox>
                     {!failure && success ? <SuccessMessage>{success}</SuccessMessage> : ''}
                     {failure ? <FailureMessage>{failure}</FailureMessage> : ''}
-                    <Form onSubmit={formik.handleSubmit} encType="multipart/form-data">
+                    <Form id="formID" onSubmit={formik.handleSubmit} encType="multipart/form-data">
                         <Word>Have a Document to add to your Store Here?</Word>
                         { user && user.id ?
                             <>
