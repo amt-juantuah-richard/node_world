@@ -395,7 +395,7 @@ const Files: React.FC<Props> = props => {
             }
                         
         </All>
-        <HeadWord>{user?.id && publicfiles ? `PUBLIC: All Public Files are available to all registered users` : ""}</HeadWord>
+        <HeadWord>{user?.id && publicfiles.length ? `PUBLIC: All Public Files are available to all registered users` : ""}</HeadWord>
         <All style={{justifyContent: "space-evenly"}}>
             { user?.id && publicfiles ?
                 publicfiles
