@@ -55,7 +55,7 @@ export const verifyOneUser = (req: Request, res: Response, next: NextFunction) =
                             ok: true,
                             message: 'Successfully verified your account. You can log in with your credentials'
                         })
-                    } else setError('Heee', next, 422);
+                    } else setError(JSON.stringify(results.rows), next, 422);
                 })
             } catch (error) {
                 setError(errorMessage(61), next, 422);
