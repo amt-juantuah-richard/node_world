@@ -101,8 +101,11 @@ export const getAUserByUsernameAndPassword = async (req: Request, res: Response,
             await pool.query(getOneUserByUsernameAndPassword, [username, password], (error, results) => {
                 if (error) {
                     setError(error, next, 400);
+                } else if (results.rows[0] && results.rows[0].verified === false) {
+                    const errorMessage = `An instruction was sent to your email (${results.rows[0].email}). Follow the instructions to verify your`;
+                    setError(errorMessage, next, 401);
                 }
-                else if (results.rows[0]) {
+                else if (results.rows[0] && results.rows[0].verified === true) {
                     const {password, ...user} = results.rows[0];
                     res.status(200).json({
                         ok: true,
@@ -223,6 +226,9 @@ export const updateAUserUsername = (req: Request, res: Response, next: NextFunct
                 } else if (!results.rows.length) {
                     const errorMessage = 'Update unsuccessful. Record not found';
                     setError(errorMessage, next, 404);
+                } else if (results.rows[0] && results.rows[0].verified === false) {
+                    const errorMessage = `An instruction was sent to your email (${results.rows[0].email}) to verify your account. Follow the instructions to verify your email and account`;
+                    setError(errorMessage, next, 401);
                 }
                 else {
                     pool.query(updateOneUserUsername, [newUsername, password, username], (error, results) => {
@@ -275,6 +281,9 @@ export const updateAUserPassword = async (req: Request, res: Response, next: Nex
                 } else if (!results.rows.length) {
                     const errorMessage = 'Update unsuccessful. Username or password might be wrong. Check again';
                     setError(errorMessage, next, 404);
+                } else if (results.rows[0] && results.rows[0].verified === false) {
+                    const errorMessage = `An instruction was sent to your email (${results.rows[0].email}) to verify your account. Follow the instructions to verify your email and account`;
+                    setError(errorMessage, next, 401);
                 }
                 else {
                     await pool.query(updateOneUserPassword, [newPassword, username, email], (error, results) => {
