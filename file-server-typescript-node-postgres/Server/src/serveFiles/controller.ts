@@ -603,12 +603,12 @@ export const sendVerificationMail = async (res: Response, token: string, email: 
             to: `${email}`,
             subject: "Account Verification: Documents Hub",
             text: '',
-            html: `<div style="margin: auto; padding: 20px; width: 300px; height: auto; border-radius: 8px; border: 1px solid black; background-color: grey; color: black">
+            html: `<div style="margin: auto; padding: 20px; width: 90%; height: auto; border-radius: 8px; border: 1px solid black; background-color: #c2e7ff3d; color: black">
                 <p>Hello,</p><br/><br/>
                 <p>You recently registered for an account with Documents Hub. To activate your account, kindly click on the link below for account verification</p><b /><b /><b />
                 <a href="https://documenthub.onrender.com/verify/${username}/${email}/${token}">documenthub.onrender.com/verify/${username}/${email}/${token}</a><b /><b /><b />
                 <p>In case you can not click on the link, copy the link below and paste it in the address bar of your browser</p><b /><b /><b />
-                <p>https://documenthub.onrender.com/verify/${username}/${email}/${token}</p>
+                <span>https://documenthub.onrender.com/verify/${username}/${email}/${token}</span>
             </div>`
             }, 
             (error, data) => {
