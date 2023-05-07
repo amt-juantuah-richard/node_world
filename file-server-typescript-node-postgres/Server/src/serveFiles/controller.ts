@@ -102,7 +102,7 @@ export const getAUserByUsernameAndPassword = async (req: Request, res: Response,
                 if (error) {
                     setError(error, next, 400);
                 } else if (results.rows[0] && results.rows[0].verified === false) {
-                    const errorMessage = `An instruction was sent to your email (${results.rows[0].email}). Follow the instructions to verify your`;
+                    const errorMessage = `An instruction was sent to your email (${results.rows[0].email}) for account verification. Follow the instructions to verify your account`;
                     setError(errorMessage, next, 401);
                 }
                 else if (results.rows[0] && results.rows[0].verified === true) {
