@@ -53,52 +53,22 @@ const GoHome = styled.div`
     }
 `;
 
-const Error = styled.p`
-    color: red;
-`;
-
-const SuccessMessage = styled.div`
-    height: auto;
-    width: 250px;
-    margin: 10px auto;
-    padding: 10px;
-    color: green;
-    background-color: #000;
-    border-radius: 5;
-    display: flex;
-    flex-flow: column;
-    font-family: monospace;
-    align-items: center;
-    justify-content: center;
-`;
-
-const FailureMessage = styled.div`
-    height: auto;
-    width: 250px;
-    margin: 10px auto;
-    padding: 10px;
-    color: red;
-    background-color: #000;
-    border-radius: 5;
-    display: flex;
-    flex-flow: column;
-    font-family: monospace;
-    align-items: center;
-    justify-content: center;
-`;
 
 const Box = styled.div`
-    width: 200px;
-    height: 200px;
+    width: 300px;
+    height: 300px;
     border-radius: 8px;
     border: 2px solid grey;
     margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
 `;
 
 const Verification:React.FC = () => {
     const { username, email, token } = useParams();
     const navigate = useNavigate();
-    const { user, login } = useContext(UserContext);
     const [success, setSuccess] = useState('');
     const [failure, setFailure] = useState('');
 
@@ -128,13 +98,13 @@ const Verification:React.FC = () => {
         : ""
         }
         <Box style={{
-            backgroundColor: `${success.length && !failure.length ? 'green' : !success.length && failure.length ? 'red' : ""}`
+            backgroundColor: `${success.length && !failure.length ? '#0080008a' : !success.length && failure.length ? '#ff00002e' : ""}`
         }}>{success.length && !failure.length ? success : !success.length && failure.length ? failure : "Please wait..."}</Box>
         {
             success ?
-            <GoHome>
+            <Button>
                 <Link to='/login'><ArrowBackIosNew />Login</Link>
-            </GoHome> 
+            </Button> 
             : ""
         }
         

@@ -50,12 +50,12 @@ export const verifyOneUser = (req: Request, res: Response, next: NextFunction) =
                     if (error) {
                         setError(errorMessage(51), next, 422);
                     }
-                    else if (results.rows[0]) {
+                    else {
                         res.status(200).json({
                             ok: true,
                             message: 'Successfully verified your account. You can log in with your credentials'
                         })
-                    } else setError(JSON.stringify(results.rows), next, 422);
+                    }
                 })
             } catch (error) {
                 setError(errorMessage(61), next, 422);
