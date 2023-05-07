@@ -87,6 +87,14 @@ const FailureMessage = styled.div`
     justify-content: center;
 `;
 
+const Box = styled.div`
+    width: 200px;
+    height: 200px;
+    border-radius: 8px;
+    border: 2px solid grey;
+    margin: auto;
+`;
+
 const Verification:React.FC = () => {
     const { username, email, token } = useParams();
     const navigate = useNavigate();
@@ -94,18 +102,41 @@ const Verification:React.FC = () => {
     const [success, setSuccess] = useState('');
     const [failure, setFailure] = useState('');
 
-    useEffect(() => {
-        console.log(username, email, token);
-    }, [])
+    const getVerified = async () => {
+        try { 
 
+            const userData = await axios.put(`${baseUniformRL}/api/v1/users/verify`, { username, email, token });
+            if (userData.data.ok) {
+                setSuccess(`🥳 🎉 🎉 ${userData.data.message} 🎉 🎉 `);
+            }
+            else if (!userData.data.ok) setFailure(userData.data.message)
+        } catch (error: any) {
+            const msg: string = error.response.data.message;
+            setFailure(msg || 'Verification failed');
+        }
+    }
+    useEffect(() => {
+        getVerified();
+    }, []);
 
   return (
     <Container>
+        { success ?
         <GoHome>
             <Link to='/'><ArrowBackIosNew /></Link>
-        </GoHome>
-        { username } { email } {token }
-        
+        </GoHome> 
+        : ""
+        }
+        <Box style={{
+            backgroundColor: `${success.length && !failure.length ? 'green' : !success.length && failure.length ? 'red' : ""}`
+        }}>{success.length && !failure.length ? success : !success.length && failure.length ? failure : "Please wait..."}</Box>
+        {
+            success ?
+            <GoHome>
+                <Link to='/login'><ArrowBackIosNew />Login</Link>
+            </GoHome> 
+            : ""
+        }
         
     </Container>
   )

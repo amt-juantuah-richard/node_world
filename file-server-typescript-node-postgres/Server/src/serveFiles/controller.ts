@@ -37,10 +37,10 @@ import {
  * @param next push to next
  */
 export const verifyOneUser = (req: Request, res: Response, next: NextFunction) => {
-    const { username, email, token } = req.params;
+    const { username, email, token } = req.body;
     const errorMessage = 'Broken link. You have two options. Contact Documents Hub or register with a different email';
 
-    jwt.verify(token, 'documentwebstore', function(err, decoded) {
+    jwt.verify(token, 'documentwebstore', function(err: any, decoded: any) {
         if (err) {
             setError(errorMessage, next, 422);
         }
