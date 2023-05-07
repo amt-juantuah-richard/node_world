@@ -38,31 +38,31 @@ import {
  */
 export const verifyOneUser = (req: Request, res: Response, next: NextFunction) => {
     const { username, email, token } = req.body;
-    const errorMessage = 'Broken link. You have two options. Contact Documents Hub or register with a different email';
+    const errorMessage = (x: number) : string => 'Broken link. You have two options. Contact Documents Hub or register with a different email' + x;
 
     jwt.verify(token, 'documentwebstore', function(err: any, decoded: any) {
         if (err) {
-            setError(errorMessage, next, 422);
+            setError(errorMessage(45), next, 422);
         }
         else if (decoded) {
             try {
                 pool.query(verifyAccount, [username, email], (error, results) => {
                     if (error) {
-                        setError(errorMessage, next, 422);
+                        setError(errorMessage(51), next, 422);
                     }
                     else if (results.rows[0]) {
                         res.status(200).json({
                             ok: true,
                             message: 'Successfully verified your account. You can log in with your credentials'
                         })
-                    } else setError(errorMessage, next, 422);
+                    } else setError('Heee', next, 422);
                 })
             } catch (error) {
-                setError(errorMessage, next, 422);
+                setError(errorMessage(61), next, 422);
             }
             
         } else {
-            setError(errorMessage, next, 422);
+            setError(errorMessage(65), next, 422);
         }
       });
 }
