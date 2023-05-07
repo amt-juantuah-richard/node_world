@@ -64,7 +64,6 @@ const Box = styled.div`
     height: 300px;
     border-radius: 8px;
     border: 2px solid grey;
-    margin: auto;
     display: flex;
     justify-content: center;
     align-items: center;
