@@ -17,11 +17,13 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
   position: relative;
+  gap: 40px;
 `;
 
 const Word = styled.span`
     text-align: center;
     margin: 18px auto;
+    line-height: 24px;
     font-weight: 600;
     font-size: 14px;
 `;
@@ -32,15 +34,18 @@ const Button = styled.button`
     background-color: #04a7c4;
     border-radius: 5px;
     height: 35px;
-    width: 100%;
+    width: 300px;
     outline: none;
     font-size: 14px;
-    margin-top: 5px;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
     border: none;
-    cursor: pointer;
+    cursor: pointer;align-items: center;
+    justify-content: center;
+    display: flex;
     &:hover {
         border: 2px solid #eeeeee;
         opacity: 0.8;
+        background-color: #0080008a;
     }
 `;
 
@@ -99,7 +104,7 @@ const Verification:React.FC = () => {
         }
         <Box style={{
             backgroundColor: `${success.length && !failure.length ? '#0080008a' : !success.length && failure.length ? '#ff00002e' : ""}`
-        }}>{success.length && !failure.length ? success : !success.length && failure.length ? failure : "Please wait..."}</Box>
+        }}><Word>{success.length && !failure.length ? success : !success.length && failure.length ? failure : "Please wait..."}</Word></Box>
         {
             success ?
             <Button>
