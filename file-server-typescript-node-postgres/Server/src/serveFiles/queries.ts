@@ -26,7 +26,9 @@ export const getAllPublicFiles = 'SELECT * FROM files WHERE privacy=\'public\'';
 // users queries
 export const getAllUsers = 'SELECT * FROM users';
 export const getAdmin = 'SELECT * FROM users WHERE id=$1 AND isadmin=\'t\'';
+export const getVerifiedAdmin = 'SELECT * FROM users WHERE id=$1 AND isadmin=\'t\' AND verified=\'t\'';
 export const getOneUserById = 'SELECT * FROM users WHERE id=$1';
+export const getOneVerifiedUserById = 'SELECT * FROM users WHERE id=$1 AND verified=\'t\'';
 export const getOneUserByEmail = 'SELECT * FROM users WHERE email=$1';
 export const getOneUserByIdAndEmail = 'SELECT * FROM users WHERE id=$1 AND email=$2';
 export const getOneUserByUsernameAndPassword = 'SELECT * FROM users WHERE username=$1 AND password=$2';

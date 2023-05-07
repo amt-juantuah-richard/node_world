@@ -3,7 +3,7 @@
 
 import { Request, Response, NextFunction } from 'express';
 import pool from '../dtb';
-import { getAdmin, getOneUserById } from './queries';
+import { getAdmin, getOneUserById, getVerifiedAdmin } from './queries';
 import path from 'path';
 import multer, { FileFilterCallback } from 'multer';
 import fs from 'fs';
@@ -77,6 +77,9 @@ export const checkAdminStatus = (req: Request, res: Response, next: NextFunction
             else if (!results.rows.length) {
                 const errorMessage = 'You are not authorized to perform this action';
                 setError(errorMessage, next, 401);
+            } else if (results.rows[0].verified === false) {
+                const errorMessage = `An instruction was sent to your email (${results.rows[0].email}). Follow the instructions to verify your`;
+                setError(errorMessage, next, 401);
             }
             else next();
         })
@@ -103,8 +106,10 @@ export const checkUserStatus = async (req: Request, res: Response, next: NextFun
             else if (!results.rows.length) {
                 const errorMessage = 'Only registered users are allowed to perform this action';
                 setError(errorMessage, next, 403);
-            }
-            else {
+            } else if (results.rows[0].verified === false) {
+                const errorMessage = `An instruction was sent to your email (${results.rows[0].email}). Follow the instructions to verify your`;
+                setError(errorMessage, next, 401);
+            } else {
                 req.body.email = results.rows[0].email;
                 next();
             }
