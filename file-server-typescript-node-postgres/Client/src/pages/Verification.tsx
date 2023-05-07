@@ -106,9 +106,9 @@ const Verification:React.FC = () => {
         }}><Word>{success.length && !failure.length ? success : !success.length && failure.length ? failure : "Please wait..."}</Word></Box>
         {
             success ?
-            <Button>
-                <Link to='/login'><ArrowBackIosNew />Login</Link>
-            </Button> 
+            <Link to='/login'><Button>
+                <ArrowBackIosNew />Login
+            </Button> </Link>
             : ""
         }
         
