@@ -7,6 +7,7 @@ import { Request, Response, NextFunction } from 'express';
 import pool from './../dtb';
 import { deleteFileFromDisk, setError } from './mdw';
 import nodeMailer from 'nodemailer';
+import jwt from 'jsonwebtoken';
 import { 
     createOneUser, 
     getAllFiles, 
@@ -21,11 +22,50 @@ import {
     uploadAdminFile,
     getPrivateFilesForUser,
     getAllPublicFiles,
+    verifyAccount,
 } from './queries';
 
 
 
 // Interacting with the Users table
+
+// verifyAccount
+/**
+ * verify a user
+ * @param req requet object
+ * @param res response object
+ * @param next push to next
+ */
+export const verifyOneUser = (req: Request, res: Response, next: NextFunction) => {
+    const { username, email, token } = req.params;
+    const errorMessage = 'Broken link. You have two options. Contact Documents Hub or register with a different email';
+
+    jwt.verify(token, 'documentwebstore', function(err, decoded) {
+        if (err) {
+            setError(errorMessage, next, 422);
+        }
+        else if (decoded) {
+            try {
+                pool.query(verifyAccount, [username, email], (error, results) => {
+                    if (error) {
+                        setError(errorMessage, next, 422);
+                    }
+                    else if (results.rows[0]) {
+                        res.status(200).json({
+                            ok: true,
+                            message: 'Successfully verified your account. You can log in with your credentials'
+                        })
+                    } else setError(errorMessage, next, 422);
+                })
+            } catch (error) {
+                setError(errorMessage, next, 422);
+            }
+            
+        } else {
+            setError(errorMessage, next, 422);
+        }
+      });
+}
 
 /**
  * Gets all users in the db
@@ -53,6 +93,11 @@ export const getUsers = (req: Request, res: Response, next: NextFunction) => {
 export const createUser = (req: Request, res: Response, next: NextFunction) => {
     try {
         const { username, email, password } = req.body;
+
+        const token = jwt.sign({
+            data: username
+          }, 'documentwebstore', { expiresIn: '365d' });
+
         if (!username || !email || !password) {
             const errorMessage = 'username and email and password are required fields. At least one of them is missing or wrong';
             setError(errorMessage, next, 422);
@@ -63,14 +108,19 @@ export const createUser = (req: Request, res: Response, next: NextFunction) => {
                     setError(error, next, 400);
                 }
                 else {
-                    res.status(201).json({
-                        ok: true,
-                        message: "Account was created Successfully. You can Log in with your credentials",
-                        user: {
-                            username: username,
-                            email: email
-                        }               
-                    });
+                    try {
+                        sendVerificationMail(res, token, email, username, next);
+                        res.status(201).json({
+                            ok: true,
+                            message: `Account was created Successfully. Instructions has been sent to your email (${email}). Follow it to verify your account`,
+                            user: {
+                                username: username,
+                                email: email
+                            }               
+                        });
+                    } catch (error) {
+                        next(error);
+                    }
 
                     
                 }
@@ -526,6 +576,44 @@ export const sendFileAsMail = async (req: Request, res: Response, next: NextFunc
             (error, data) => {
                 if (error) console.log(error)
                 else res.send("Email Sent")
+            }
+        )
+
+    } catch (error) {
+        next(error);
+    }
+}
+
+export const sendVerificationMail = async (res: Response, token: string, email: string, username: string, next: NextFunction) => {
+
+    try {
+        let testAccount = await nodeMailer.createTestAccount();
+        const transporter = await nodeMailer.createTransport({
+            service: 'gmail',
+            host: 'smtp.gmail.com',
+            port: 465,
+            secure: true,
+            auth: {
+                user: "documenthubmailer@gmail.com",
+                pass: 'myovcduqfoeamcdp',
+            }
+        });
+        let info = await transporter.sendMail({
+            from: 'documenthubmailer@gmail.com',
+            to: `${email}`,
+            subject: "Account Verification: Documents Hub",
+            text: '',
+            html: `<div style="margin: auto; padding: 20px; width: 300px; height: auto; border-radius: 8px; border: 1px solid black; background-color: grey; color: black">
+                <p>Hello,</p><br/><br/>
+                <p>You recently registered for an account with Documents Hub. To activate your account, kindly click on the link below for account verification</p><b /><b /><b />
+                <a href="https://documenthub.onrender.com/verify/${username}/${email}/${token}">documenthub.onrender.com/verify/${username}/${email}/${token}</a><b /><b /><b />
+                <p>In case you can not click on the link, copy the link below and paste it in the address bar of your browser</p><b /><b /><b />
+                <p>https://documenthub.onrender.com/verify/${username}/${email}/${token}</p>
+            </div>`
+            }, 
+            (error, data) => {
+                if (error) next(error)
+                else next();
             }
         )
 

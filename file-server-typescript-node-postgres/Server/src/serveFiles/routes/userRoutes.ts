@@ -7,13 +7,15 @@ import {
     getAUserById,
     deleteAUserById,
     updateAUserUsername,
-    updateAUserPassword
+    updateAUserPassword,
+    verifyOneUser
 } from "../controller";
 
 
 const router = Router();
 
 router.get("/", checkAdminStatus, getUsers);
+router.get("/verify/:username/:email/:token", verifyOneUser);
 router.post("/register", createUser);
 router.post("/login", getAUserByUsernameAndPassword);
 router.get("/:id", checkAdminStatus, getAUserById);
