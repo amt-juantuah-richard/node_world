@@ -573,9 +573,19 @@ export const sendFileAsMail = async (req: Request, res: Response, next: NextFunc
             html: `<p> You have recieved a new file from ${senderEmail}. The file is attached this mail <br/>Visit <a href="https://documenthub.onrender.com/">Document Hub Store</a> to: <ol><li>Save your files in <b>your private file store</b></li><li>Easily download your saved files</li> <li>Share documents with others via email</li> <li>...and more</li> </ol>  </p>`,
             attachments: [{ path: `./public/uploads/${fileName}`}]
             }, 
-            (error, data) => {
+            async (error, data) => {
                 if (error) console.log(error)
-                else res.send("Email Sent")
+                else {
+                    await pool.query("UPDATE files SET shares=shares+1 WHERE file_name=$1", [fileName], function (error, results) {
+                        if (error) {
+                            setError(error, next, 400);
+                        }
+                        else {
+                            console.log("file sent");
+                        }
+                    }); 
+                    res.send("Email Sent")
+                }
             }
         )
 
