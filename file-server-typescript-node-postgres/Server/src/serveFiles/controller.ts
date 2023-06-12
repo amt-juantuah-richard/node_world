@@ -574,7 +574,7 @@ export const sendFileAsMail = async (req: Request, res: Response, next: NextFunc
             attachments: [{ path: `./public/uploads/${fileName}`}]
             }, 
             async (error, data) => {
-                if (error) console.log(error)
+                if (error) setError(error, next, 400);
                 else {
                     await pool.query("UPDATE files SET shares=shares+1 WHERE file_name=$1", [fileName], function (error, results) {
                         if (error) {
