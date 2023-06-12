@@ -147,7 +147,7 @@ const Downs = styled.div`
     width: auto;
     height: 20px;
     display: flex;
-    flex-flow: row;
+    flex-flow: column;
     gap: 2px;
     padding: 3px;
     border-radius: 5px 0 3px 0;
@@ -204,6 +204,7 @@ const File:React.FC<Props> = props => {
     const [mailerNotification, setmailerNotification] = useState('none');
     const [reciever, setReciever] = useState('');
     const [downs, setDowns] = useState(0);
+    const [shares, setShares] = useState(0);
     const [format, setFormat] = useState(<GrDocument />)
     const {user} = useContext(UserContext);
 
@@ -214,6 +215,10 @@ const File:React.FC<Props> = props => {
     useEffect(() => {
         setDowns(parseInt(docFile.downloads));
     }, [docFile.downloads])
+
+    useEffect(() => {
+        setShares(parseInt(docFile.shares));
+    }, [docFile.shares])
     
     useEffect(() => {
         const formatString = docFile.file_format.split("/")[1];
@@ -268,6 +273,7 @@ const File:React.FC<Props> = props => {
                 setTimeout(() => {
                     setmailerNotification('none');
                 }, 10000)
+                setShares(shares + 1);
             }
             else {
                 setSending("none");                
@@ -279,6 +285,7 @@ const File:React.FC<Props> = props => {
             if (error.response.data.stack.includes('dns')) {
                 alert('Check your internet connection. If issue persists, server might be down')
             }
+            alert('An unknown error occured. Try sending again')
         }
     }
 
@@ -291,6 +298,7 @@ const File:React.FC<Props> = props => {
             <Fname>{ docFile.file_name}</Fname>
             <Downs>
                 <p>{ downs } downloads</p>
+                <p>{ shares } shares </p>
             </Downs>
             <Privacy> 
                 <p> { docFile.privacy == 'private' ? "private" : "public" } </p>
