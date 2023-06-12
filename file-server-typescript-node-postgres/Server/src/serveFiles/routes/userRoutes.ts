@@ -22,5 +22,6 @@ router.get("/:id", checkAdminStatus, getAUserById);
 router.delete("/:id", checkAdminStatus, deleteAUserById);
 router.put("/username", updateAUserUsername);
 router.put("/password", updateAUserPassword);
+// router.get()
 
 export default router;
