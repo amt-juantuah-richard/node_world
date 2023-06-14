@@ -38,17 +38,17 @@ import {
  */
 export const verifyOneUser = (req: Request, res: Response, next: NextFunction) => {
     const { username, email, token } = req.body;
-    const errorMessage = (x: number) : string => 'Broken link. You have two options. Contact Documents Hub or register with a different email' + x;
+    const errorMessage = 'Broken link. You have two options. Contact Documents Hub or register with a different email';
 
     jwt.verify(token, 'documentwebstore', function(err: any, decoded: any) {
         if (err) {
-            setError(errorMessage(45), next, 422);
+            setError(errorMessage, next, 422);
         }
         else if (decoded) {
             try {
                 pool.query(verifyAccount, [username, email], (error, results) => {
                     if (error) {
-                        setError(errorMessage(51), next, 422);
+                        setError(errorMessage, next, 422);
                     }
                     else {
                         res.status(200).json({
@@ -58,11 +58,11 @@ export const verifyOneUser = (req: Request, res: Response, next: NextFunction) =
                     }
                 })
             } catch (error) {
-                setError(errorMessage(61), next, 422);
+                setError(errorMessage, next, 422);
             }
             
         } else {
-            setError(errorMessage(65), next, 422);
+            setError(errorMessage, next, 422);
         }
       });
 }
@@ -321,7 +321,7 @@ export const updateAUserPassword = async (req: Request, res: Response, next: Nex
         const { username, email, newPassword } = req.body;
 
         if (!username || !email || !newPassword) {
-            const errorMessage = 'username, email, and new password are required fields for username updates';
+            const errorMessage = 'username, email, and new password are required fields for password updates';
             setError(errorMessage, next, 400);
         }
         else {

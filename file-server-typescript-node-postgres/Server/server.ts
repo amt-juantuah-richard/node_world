@@ -7,6 +7,8 @@ import userRoute from './src/serveFiles/routes/userRoutes';
 import fileRoute from './src/serveFiles/routes/fileRoutes';
 import cookieParser from 'cookie-parser';
 import { errorHandler } from './src/serveFiles/mdw';
+import swaggerUi from 'swagger-ui-express';
+import swaggerJsdoc from 'swagger-jsdoc';
 
 
 // configer dotenv
@@ -18,6 +20,45 @@ const app = express();
 
 // set up port number
 const port = process.env.PORT || 5000;
+
+// ................. SWagger Dogs ............
+const options: swaggerJsdoc.Options = {
+    definition: {
+      openapi: "3.0.0",
+      info: {
+        title: "Document Hub API with Swagger",
+        version: "0.1.0",
+        description:
+          "API Documentation for Document Hub",
+        license: {
+          name: "MIT",
+          url: "https://spdx.org/licenses/MIT.html",
+        },
+        contact: {
+          name: "Document Hub",
+          url: "https://documenthub.onrender.com",
+        },
+      },
+      servers: [
+        {
+          url: "https://document-hub-store.onrender.com",
+        },
+        {
+          url: `http://localhost:${port}`,
+        },
+      ],
+      schemes: [ "http", "https"],
+    },
+    apis: ["./src/schemas/*.ts"],
+  };
+  
+  const specs = swaggerJsdoc(options);
+  app.use(
+    "/api-docs",
+    swaggerUi.serve,
+    swaggerUi.setup(specs)
+  );
+//   ...........
 
 const FILES = path.join(__dirname, 'public');
 app.use(express.static(FILES));
