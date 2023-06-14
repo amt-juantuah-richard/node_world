@@ -35,15 +35,19 @@ const Container = styled.div`
 `;
 
 const Flag = styled.div`
-    background-color: #04a7c4;
+    background-color: rgb(4, 167, 196);
     width: 255px;
-    height: 60px;
+    height: 62px;
     display: flex;
-    flex-flow: column;
+    flex-flow: column-reverse;
+    -webkit-box-align: center;
     align-items: center;
-    justify-content: center;
-    border-radius: 5px 5px 0 0;
+    -webkit-box-pack: center;
+    justify-content: end;
+    border-radius: 5px 5px 0px 0px;
     position: relative;
+    padding-top: 24px;
+    padding-bottom: 5px;
 `;
 
 const About = styled.div`
@@ -125,7 +129,8 @@ const Words = styled.p`
 
 const Fname = styled(Words)`
     font-style: italic;
-    font-weight: 12px;
+    // font-weight: 10px;
+    font-size: 11px;
     font-family: monospace;
     overflow-wrap: anywhere;
 `
@@ -141,17 +146,17 @@ const ButtomDiv = styled.div`
 
 const Downs = styled.div`
     position: absolute;
-    top: 0;
-    left: 0;
+    top: 0px;
+    left: 0px;
     margin: 2px;
     width: auto;
-    height: 20px;
+    height: 23px;
     display: flex;
-    flex-flow: column;
-    gap: 2px;
+    /* flex-flow: column; */
+    gap: 25px;
     padding: 3px;
-    border-radius: 5px 0 3px 0;
-    background-color: #04c467;
+    border-radius: 5px 0px 3px;
+    background-color: rgb(4, 196, 103);
     & p {
         color: red;
         font-size: 12px;
